@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 def create_app():
     """Create and configure instance of the Flask application"""
@@ -7,6 +7,6 @@ def create_app():
 
     @app.route('/')
     def barebones():
-        return 'the crawler'
+        return render_template('base.html')
 
     return app
