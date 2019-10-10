@@ -39,6 +39,7 @@ def plot_monte(mc = my_monte, n = 15):
     mc.iloc[:, 0:n].plot(figsize=(15,5))
 
 def p_and_l(mc = test_monte, t = test_trades):
+    """generates position and p&l data"""
     col_name = mc.columns[0]
     frame = mc.copy()
     frame['trade'] = t
@@ -49,6 +50,7 @@ def p_and_l(mc = test_monte, t = test_trades):
     return frame
 
 class trading_rules:
+    """class to hold trading rules for bot"""
     def __init__(self,portfolio_size = 1000000 , trade_increment = 100000, 
                  stop_loss = -5, stop_profit = 10, 
                  trend_follow=False, mean_revert=False,
@@ -84,6 +86,7 @@ def trend_finder(rg, s=10, m=30, l=50):
     return slope,coeff
 
 def trade_generator(test_monte_so_far,t_so_far,t_rules = trading_rules()):
+    """generates trades given rules for bot"""
     frame = p_and_l(test_monte_so_far,t_so_far)
     new_trade = 0
     
@@ -114,6 +117,7 @@ def trade_generator(test_monte_so_far,t_so_far,t_rules = trading_rules()):
     return new_trade
 
 def run_bot_over_montes(monte_group, pda = 50, tr = trading_rules()):
+    """generates positions and p&ls for bot over different scenarios"""
     trade_histories = []
     for j in tqdm(range(len(monte_group.columns))):
         temp_tr = trading_rules()
