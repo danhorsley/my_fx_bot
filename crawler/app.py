@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -15,12 +15,26 @@ def root():
 
     return render_template('base.html')
 
+@APP.route('/', methods=['POST'])
+def my_form_post():
+    ts = request.form['time_series']
+    sn = request.form['sim_number']
+    processed_text = ts.lower() + str(sn)
+    return processed_text
+
 @APP.route('/refresh')
 def refresh():
     """Pull fresh data from Open AQ and replace existing data."""
     DB.drop_all()
     DB.create_all()
     return render_template('base.html')
+
+@APP.route('/my_form')#, methods=['POST'])
+def my_form():
+    #form_input = request.form['ts_content']
+    #print(form_input)
+    # Now that get value back to server can send it to a DB(use Flask-SQLAlchemy)
+    return "submitted"
 
 class Record(DB.Model):
     id = DB.Column(DB.Integer, primary_key=True)

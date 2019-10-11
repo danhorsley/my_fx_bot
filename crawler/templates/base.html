@@ -1,27 +1,48 @@
 <!DOCTYPE html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>{% block title %}{% endblock %}fx bot bot</title>
 <link rel="stylesheet" href="https://unpkg.com/picnic">
+<style type="text/css" media="screen">
+
+.myCoolButton {
+    background: #D0D3D4;
+}
+body {
+      background-color: #C0C0C0;
+    }
+</style>
 <body>
-  <h1>fx crawler bot</h1>
-  <h2> Please select your time series...</h2>
-  <div class="menu">
-    <select>
-      <option>Choose an option</option>
-      <option>EURUSD</option>
-      <option>USDJPY</option>
-      <option>EURJPY</option>
-    </select>
+<button class="myCoolButton">My Cool Button</button>
+  <article class="card">
+  <header>
+    <h3>fx bot</h3>
+  </header>
+  <div class="flex one" style="width: 650px;height: 250pn">
+  <button class="myCoolButton">Please select your...</button>
   </div>
-  <h2> ...and number of Monte Carlo simulations</h2>
-  <div class="menu">
-    <select>
-      <option>Choose an option</option>
-      <option>10</option>
-      <option>25</option>
-      <option>50</option>
-      <option>75</option>
-      <option>100</option>
-    </select>
-  </div>
-<button class='Success'>Submit</button>
+  <form action="/" method='POST'>
+  
+  <div class="flex four" style="width: 650px;height: 250pn">
+  <h4 align="center"> time series </h4>
+  <select name="time_series" >
+    <option value="EURUSD">EURUSD</option>
+    <option value="USDJPY">USDJPY</option>
+    <option value="EURJPY">EURJPY</option>
+    <option value="GBPUSD">GBPUSD</option>
+  </select>
+  <h4 align="center"> simulations</h4>
+  <select name="sim_number">
+    <option value= 5 > 5 </option>
+    <option value= 10 > 10 </option>
+    <option value= 25 > 25 </option>
+    <option value= 50 > 50 </option>
+  </select>
+    </div>
+  <div class="flex one" style="width: 650px;height: 250pn">
+  <input class='myCoolButton' value="Submit" type="submit" align="center">
+     </div>
+
+  
+</form>
+</article>
+  
 </body>
