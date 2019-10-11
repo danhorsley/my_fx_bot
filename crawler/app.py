@@ -24,13 +24,48 @@ def my_form_post():
     my_label = f'{ts}_1d.csv'
     df = my_csv_reader(my_label, form = 'd')
     mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
+    
+    #creating plot of simulations
     plt.clf()
     plt.plot(mc.iloc[:, :10])
     strFile = 'crawler/static/images/new_plot2.png'
-    os.remove(strFile)
+    if os.path.isfile(strFile):
+        os.remove(strFile)
     plt.savefig(strFile)
+
+    #creating trades for simulations
+    scenarios = run_bot_over_montes(mc, pda = 50, tr = trading_rules())
+    results = []
+    for scenario in scenarios:
+        _ = scenario['p_and_l'][-1]
+        results.append(_)
+    
+    my_dict = {}
+    for n,l in enumerate(results):
+        my_dict[n+1]=l
+    
+    result_avg = sum(results)/len(results)
+    result_worst = min(results)
+    results_best = max(results)
+    scenario_zero = scenarios[0]
+
+    plt.clf()
+    data_color = [x / max(results) for x in results]
+    my_cmap = plt.cm.get_cmap('RdBu')
+    colors = my_cmap(data_color)
+    plt.bar(x=my_dict.keys(),height = my_dict.values(),width=0.8,color=colors)
+    strFile2 = 'crawler/static/images/bar_plot.png'
+    if os.path.isfile(strFile2):
+        os.remove(strFile2)
+    plt.savefig(strFile2)
+
     return render_template('plot_render.html', name = 'Monte Carlo Simulation Plot',
-     url ='static/images/new_plot2.png',tables=[df.to_html(classes='data')], titles=df.columns.values)
+     url ='static/images/new_plot2.png',
+     url2 ='static/images/bar_plot.png',
+     tables = [scenario_zero.to_html(classes='data')], 
+     titles = scenario_zero.columns.values,
+     average_panl = result_avg, worst_panl = result_worst, best_panl = results_best, results = results,
+     scenario_z = scenario_zero)
     #this returns rendered times series
     #return render_template('dataframe.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
 

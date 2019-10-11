@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+from tqdm import tqdm
 
 import datetime as dt     
 start_date = dt.date.today()
@@ -128,9 +129,9 @@ def run_bot_over_montes(monte_group, pda = 50, tr = trading_rules()):
     trade_histories = []
     for j in tqdm(range(len(monte_group.columns))):
         temp_tr = trading_rules()
-        monte = my_monte[[monte_group.columns[j]]]
+        monte = monte_group[[monte_group.columns[j]]]
         no_trades = [0 for x in range(pda)]
-        for i in range(len(test_monte)-pda):
+        for i in range(len(monte)-pda):
             new_trade = trade_generator(monte[:50+i],no_trades,t_rules = temp_tr)
             no_trades.append(new_trade)
         trade_history = p_and_l(monte,no_trades)
