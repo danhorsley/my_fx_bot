@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from flask_sqlalchemy import SQLAlchemy
+import matplotlib.pyplot as plt
+from bot import *
 import os
 
 APP = Flask(__name__)
@@ -18,9 +20,31 @@ def root():
 @APP.route('/', methods=['POST'])
 def my_form_post():
     ts = request.form['time_series']
-    sn = request.form['sim_number']
-    processed_text = ts.lower() + str(sn)
-    return processed_text
+    sn = int(request.form['sim_number'])
+    my_label = f'{ts}_1d.csv'
+    df = my_csv_reader(my_label, form = 'd')
+    mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
+    plt.clf()
+    plt.plot(mc.iloc[:, :10])
+    strFile = 'crawler/static/images/new_plot2.png'
+    os.remove(strFile)
+    plt.savefig(strFile)
+    return render_template('plot_render.html', name = 'Monte Carlo Simulation Plot',
+     url ='static/images/new_plot2.png',tables=[df.to_html(classes='data')], titles=df.columns.values)
+    #this returns rendered times series
+    #return render_template('dataframe.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@APP.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 @APP.route('/refresh')
 def refresh():

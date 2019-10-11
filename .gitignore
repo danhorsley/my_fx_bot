@@ -59,6 +59,9 @@ db.sqlite3
 #csv files
 *.csv
 
+#png files
+*.png
+
 # Flask stuff:
 instance/
 .webassets-cache

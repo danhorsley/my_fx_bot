@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+   <body>
+
+       <p>{{ name }}</p>
+
+  <img src={{ url}} alt="Chart not displaying?" height="300" width="1000">
+
+<br> </br>
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
+   </body>
+</html>

@@ -3,6 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
+import datetime as dt     
+start_date = dt.date.today()
+y = dt.timedelta(days=1*365)
+end_date = start_date + y
+nb_paths = 10
+initial_price = 1.10
+
 def my_csv_reader(file, form = 'd'):
     """reads the csv file and converts the datetime into something useable"""
     eurusd = pd.read_csv('EURUSD_1d.csv')
@@ -13,14 +20,14 @@ def my_csv_reader(file, form = 'd'):
     eurusd['returns'] = eurusd['close'].pct_change()
     return eurusd
 
-def monte_carlo(sd = start_date, ed = end_date, n = nb_paths,detrend=True):
+def monte_carlo(frame, sd = start_date, ed = end_date, n = nb_paths,detrend=True):
     """Monte carlo simulation for date range - start date and end date
     n is number of simualations
     detrend will take trend out of data - i.e. absolute all values and assign + or - to returns
     with 50/50 probability"""
     dates = pd.bdate_range(sd, ed)
     nb_dates = len(dates)
-    sample_source = eurusd['returns'].values[1:]
+    sample_source = frame['returns'].values[1:]
     if detrend:
         ss = pd.Series(sample_source).abs()
         ones = pd.Series([random.choice([-1,1]) for x in range(len(ss))])
@@ -35,10 +42,10 @@ def monte_carlo(sd = start_date, ed = end_date, n = nb_paths,detrend=True):
     df_price *= initial_price
     return df_price
 
-def plot_monte(mc = my_monte, n = 15):
-    mc.iloc[:, 0:n].plot(figsize=(15,5))
+def plot_monte(mc, n = 15):
+    return mc.iloc[:, 0:n].plot(figsize=(15,5))
 
-def p_and_l(mc = test_monte, t = test_trades):
+def p_and_l(mc, t ):
     """generates position and p&l data"""
     col_name = mc.columns[0]
     frame = mc.copy()
