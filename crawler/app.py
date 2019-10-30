@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, Response
 from flask_sqlalchemy import SQLAlchemy
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from .bot import *
 import os
 import pygal
