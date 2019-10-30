@@ -1,17 +1,20 @@
 <!doctype html>
 <html>
-   <body>
 
-       <h1>{{ name }}</h1>
+   <body style="font-family: 'Inconsolata', monospace;"">
+
+       <h2>{{ name }}</h2>
 
 
 
 <div id="chart">
-   <embed type="image/svg+xml" src= {{ pyg|safe }} />
+   <embed type="image/svg+xml" src= {{ pyg|safe }} width="1000" height="400" />
 </div>
 
+<br>   </br>
+
 <div id="chart">
-   <embed type="image/svg+xml" src= {{ pyg_b|safe }} />
+   <embed type="image/svg+xml" src= {{ pyg_b|safe }} width="1000" height="400" />
 </div>
 
 {% for result in results %}

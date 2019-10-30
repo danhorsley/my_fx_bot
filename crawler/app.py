@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from .bot import *
 import os
 import pygal
+from pygal.style import Style
 from .__init__ import APP, DB
 
 # APP = Flask(__name__)
@@ -60,15 +61,22 @@ def my_form_post():
     # if os.path.isfile(strFile2):
     #     os.remove(strFile2)
     # plt.savefig(strFile2)
+    #default font is Inconsolata
+    custom_style = Style(
+        label_font_size=20,
+        legend_font_size=20,
+        title_font_size=30,
+        font_family = 'googlefont:Inconsolata')
 
-    line_chart = pygal.Line(width=1500,height=500)
-    bar_chart = pygal.HorizontalBar(width=500,height=250)
+    line_chart = pygal.Line(width=1000,height=500, style = custom_style)  #width=1500,height=500, 
+    bar_chart = pygal.Bar(width=750, style = custom_style)  #width=500,height=250, Horizontal
+    #bar_chart = pygal.Bar(style = custom_style)
 
     line_chart.title = f'{sn} Monte Carlo EURUSD simulations'
     bar_chart.title = 'profit and loss by simulation'
     #bar_chart.add('p&l by simulation',my_dict.values())
     line_chart.x_labels = map(str, mc[0].index)
-    bar_chart.x_labels = map(str, my_dict.keys()) #range(2002, 2013))
+    #bar_chart.x_labels = map(str, my_dict.keys()) #range(2002, 2013))
     for n in range(sn):
         line_chart.add(f'simulation {n}',  mc[n], show_only_major_dots=True)
         bar_chart.add(f'simulation {n}', my_dict[n+1])
@@ -80,7 +88,7 @@ def my_form_post():
 
     
 
-    return render_template('plot_render.html', name = 'Monte Carlo Simulation Plot',
+    return render_template('plot_render.html', name = 'Simulation Results',
     #  url ='static/images/new_plot2.png',
     #  url2 ='static/images/bar_plot.png',
      tables = [scenario_zero.to_html(classes='data')], 
