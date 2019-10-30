@@ -125,7 +125,8 @@ def trade_generator(test_monte_so_far,t_so_far,t_rules = trading_rules()):
     return new_trade
 
 def run_bot_over_montes(monte_group, pda = 50, tr = trading_rules()):
-    """generates positions and p&ls for bot over different scenarios"""
+    """generates positions and p&ls for bot over different scenarios
+    pda is the initial data before you start runnign the scenario"""
     trade_histories = []
     for j in tqdm(range(len(monte_group.columns))):
         temp_tr = trading_rules()

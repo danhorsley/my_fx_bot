@@ -4,14 +4,15 @@
 
        <h1>{{ name }}</h1>
 
-  <img src={{ url}} alt="Chart not displaying?" height="300" width="1000">
 
-<br> </br>
 
-<h1> results graph </h1>
+<div id="chart">
+   <embed type="image/svg+xml" src= {{ pyg|safe }} />
+</div>
 
-  <img src={{ url2}} alt="Chart not displaying?" height="300" width="1000">
-
+<div id="chart">
+   <embed type="image/svg+xml" src= {{ pyg_b|safe }} />
+</div>
 
 {% for result in results %}
            
