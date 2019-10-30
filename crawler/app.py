@@ -93,8 +93,8 @@ def my_form_post():
                         'value': 150000})
     #bar_chart.x_labels = map(str, my_dict.keys()) #range(2002, 2013))
     for n in range(sn):
-        line_chart.add(f'simulation {n}',  mc[n], show_only_major_dots=True)
-        bar_chart.add(f'simulation {n}', my_dict[n+1])
+        line_chart.add(f'simulation {n + 1}',  mc[n], show_only_major_dots=True)
+        bar_chart.add(f'simulation {n + 1}', my_dict[n+1])
         # [{'value' : my_dict[n+1], 'color' :f'rgba({(my_dict[n+1]/max(my_dict.values()))}, 45,20,0.6)'}])
         #bar_chart.add(f'simualation {n}', my_dict[n])
     bar_chart.add(f'average', sum(my_dict.values())/len(my_dict))
