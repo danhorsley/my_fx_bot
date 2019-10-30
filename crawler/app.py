@@ -62,14 +62,20 @@ def my_form_post():
         title_font_size=30,
         font_family = 'googlefont:Inconsolata')
 
-    line_chart = pygal.Line(width=1000,height=500, style = custom_style)  #width=1500,height=500, 
-    bar_chart = pygal.Bar(width=1500, style = custom_style)  #width=500,height=250, Horizontal
+    line_chart = pygal.Line(width=1000,height=500, style = custom_style, show_dots=False)  #width=1500,height=500, 
+    bar_chart = pygal.Bar(width=1150, style = custom_style)  #width=500,height=250, Horizontal
     #bar_chart = pygal.Bar(style = custom_style)
 
     line_chart.title = f'{sn} Monte Carlo {ts} simulations'
     bar_chart.title = 'profit and loss by simulation'
     #bar_chart.add('p&l by simulation',my_dict.values())
-    line_chart.x_labels = map(str, mc[0].index)
+    #line_chart.x_labels = map(str, mc[0].index)
+    line_chart.x_labels = ({
+                        'label': f'{start_date}',
+                        'value': start_date
+                        }, {
+                        'label': f'{end_date}',
+                        'value': end_date})
     bar_chart.y_labels = ({
                         'label': '-150k',
                         'value': -150000
