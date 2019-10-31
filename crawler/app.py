@@ -6,6 +6,8 @@ import os
 import pygal
 from pygal.style import Style
 from .__init__ import APP, DB
+from .models import Leaderboard
+from time import time
 
 @APP.route('/')
 def root():
@@ -44,22 +46,7 @@ def my_form_post():
     my_dict = {}
     for n,l in enumerate(results):
         my_dict[n+1]=int(l)  #change results to int
-    
-    result_avg = sum(results)/len(results)
-    result_worst = min(results)
-    results_best = max(results)
-    scenario_zero = scenarios[0]
 
-    # plt.clf()
-    # data_color = [x / max(results) for x in results]
-    # my_cmap = plt.cm.get_cmap('RdBu')
-    # colors = my_cmap(data_color)
-    # plt.bar(x=my_dict.keys(),height = my_dict.values(),width=0.8,color=colors)
-    # strFile2 = 'crawler/static/images/bar_plot.png'
-    # if os.path.isfile(strFile2):
-    #     os.remove(strFile2)
-    # plt.savefig(strFile2)
-    #default font is Inconsolata
     custom_style = Style(
         label_font_size=20,
         major_label_font_size = 20,
@@ -67,14 +54,11 @@ def my_form_post():
         title_font_size=30,
         font_family = 'googlefont:Inconsolata')
 
-    line_chart = pygal.Line(width=1000,height=500, style = custom_style, show_dots=False)  #width=1500,height=500, 
-    bar_chart = pygal.Bar(width=1150, style = custom_style)  #width=500,height=250, Horizontal
-    #bar_chart = pygal.Bar(style = custom_style)
+    line_chart = pygal.Line(width=1000,height=500, style = custom_style, show_dots=False)   
+    bar_chart = pygal.Bar(width=1150, style = custom_style) 
 
     line_chart.title = f'{sn} Monte Carlo {ts} simulations'
     bar_chart.title = 'profit and loss by simulation'
-    #bar_chart.add('p&l by simulation',my_dict.values())
-    #line_chart.x_labels = map(str, mc[0].index)
     line_chart.x_labels = ({
                         'label': f'{start_date}',
                         'value': start_date
@@ -96,23 +80,28 @@ def my_form_post():
                         }, {
                         'label': '150k',
                         'value': 150000})
-    #bar_chart.x_labels = map(str, my_dict.keys()) #range(2002, 2013))
     for n in range(sn):
         line_chart.add(f'simulation {n + 1}',  mc[n], show_only_major_dots=True)
         bar_chart.add(f'simulation {n + 1}', my_dict[n+1])
-        # [{'value' : my_dict[n+1], 'color' :f'rgba({(my_dict[n+1]/max(my_dict.values()))}, 45,20,0.6)'}])
-        #bar_chart.add(f'simualation {n}', my_dict[n])
-    bar_chart.add(f'average', sum(my_dict.values())/len(my_dict))
+    avg_profit = int(sum(my_dict.values())/len(my_dict))
+    bar_chart.add(f'average', avg_profit)
     pyg_chart = line_chart.render_data_uri()
     pyg_bar = bar_chart.render_data_uri()
 
+    scenario_zero = scenarios[0]
+    leaderboard_entry = Leaderboard(id = time(),ltsm = ltsm, trend1 = tf1, trend2 = tf2, trend3 = tf3,
+                                     mr = mr, stop_loss = sl, stop_profit = sp, profit = avg_profit,
+                                     sim_number = sn, currency = ts, )
+
     
+    DB.session.add(leaderboard_entry)
+    DB.session.commit()
 
     return render_template('plot_render.html', name = 'Simulation Results',
     #  url ='static/images/new_plot2.png',
      tables = [scenario_zero.to_html(classes='data')], 
      titles = scenario_zero.columns.values,
-     average_panl = result_avg, worst_panl = result_worst, best_panl = results_best, results = results,
+     results = results,
      scenario_z = scenario_zero,
      pyg = pyg_chart,
      pyg_b = pyg_bar)
@@ -137,5 +126,12 @@ def dbr():
     DB.drop_all()
     DB.create_all()
 
-    return 'DB reset'
+    return 'db reset'
+
+@APP.route('/leaderboard')
+def leader():
+    """fully reset models"""
+    my_query = DB.session.query().all()
+
+    return my_query
     

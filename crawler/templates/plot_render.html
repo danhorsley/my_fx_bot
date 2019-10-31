@@ -34,11 +34,6 @@
    <embed type="image/svg+xml" src= {{ pyg_b|safe }} width="1000" height="400" />
 </div>
 
-{% for result in results %}
-           
-            {{ result|safe }}
-{% endfor %}
-
 <br> </br>
 {% for table in tables %}
             {{titles[loop.index]}}
