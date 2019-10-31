@@ -131,7 +131,15 @@ def dbr():
 @APP.route('/leaderboard')
 def leader():
     """fully reset models"""
-    my_query = DB.session.query(Leaderboard.profit).order_by(Leaderboard.profit).all()
-    print(type(my_query))
-    return render_template('plot_render.html', name = 'Leaderboard', ldr = my_query)
+    my_query = DB.session.query(Leaderboard.profit,Leaderboard.id, Leaderboard.mr,
+                                    Leaderboard.trend1,Leaderboard.trend2,Leaderboard.trend3, 
+                                    Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
+                                    Leaderboard.sim_number, Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
+    my_query = pd.DataFrame(my_query)
+    print(my_query.head())
+    my_query.columns= ['profit','id','mean reversion','trend1','trend2','trend3',
+                        'stop_loss','stop_profit','currency','sim_number','ltsm']
+    return render_template('leaderboard.html', name = 'Leaderboard', 
+                                ldr = [my_query.to_html(classes='data')],
+                                 titles = my_query.columns.values)
     

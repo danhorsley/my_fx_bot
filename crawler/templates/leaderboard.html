@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://unpkg.com/picnic">
    <body style="font-family: 'Inconsolata', monospace;" background_color: '#E5E8E8'>
 
+
 <div style="overflow: hidden;height: 50px;"> <!-- For Demo, Represents the body -->
 
 <nav class="demo">
@@ -21,14 +22,11 @@
 </nav>
   </div>
   <h2>{{ name }}</h2>
-  
-{% for item in ldr %}
-      <tr>    
-           <td>  {{ item }} </td>
 
-    </tr> 
+{% for table in ldr %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
 {% endfor %}
-
 
    </body>
 </html>

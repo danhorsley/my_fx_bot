@@ -5,3 +5,10 @@
 <h1> results graph </h1>
 
   <img src={{ url2}} alt="Chart not displaying?" height="300" width="1000"> 
+
+  {% for item in ldr %}
+      <tr>    
+           <td>  {{ item }} </td>
+
+    </tr> 
+{% endfor %}
