@@ -43,7 +43,7 @@ def my_form_post():
     
     my_dict = {}
     for n,l in enumerate(results):
-        my_dict[n+1]=l
+        my_dict[n+1]=int(l)  #change results to int
     
     result_avg = sum(results)/len(results)
     result_worst = min(results)

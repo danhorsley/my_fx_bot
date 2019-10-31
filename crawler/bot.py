@@ -22,6 +22,7 @@ def my_csv_reader(file, form = 'd'):
     eurusd['date'] = eurusd['date'].str.replace(r"GMT[+-]\d+", "")
     eurusd['date'] = pd.to_datetime(eurusd['date'],format='%d.%m.%Y %H:%M:%S.%f')#GMT')#+0100')
     eurusd = eurusd.set_index('date',drop=True)
+    eurusd = eurusd[['close']]
     eurusd['returns'] = eurusd['close'].pct_change()
     return eurusd
 
