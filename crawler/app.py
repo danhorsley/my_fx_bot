@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 #import matplotlib.pyplot as plt
 from .bot import *
@@ -131,7 +131,7 @@ def dbr():
 @APP.route('/leaderboard')
 def leader():
     """fully reset models"""
-    my_query = DB.session.query().all()
-
-    return my_query
+    my_query = DB.session.query(Leaderboard.profit).order_by(Leaderboard.profit).all()
+    print(type(my_query))
+    return render_template('plot_render.html', name = 'Leaderboard', ldr = my_query)
     
