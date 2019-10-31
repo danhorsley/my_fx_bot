@@ -15,22 +15,26 @@ def root():
 
 @APP.route('/', methods=['POST'])
 def my_form_post():
-    ts = request.form['time_series']
-    sn = int(request.form['sim_number'])
-    my_label = f'{ts}_1d.csv'
-    df = my_csv_reader(my_label, form = 'd')
-    mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
+    ts = request.form['time_series']  #which currency
+    sn = int(request.form['sim_number']) #number of mc sims to run
+    tf1 = int(request.form['tf1'])  #trend to follow 1
+    tf2 = int(request.form['tf2'])  #trend to follow 2
+    tf3 = int(request.form['tf3'])  #trend to follow 3
+    ltsm = int(request.form['ltsm'])  #trend to follow
+    sl = int(request.form['sl'])  #stop loss
+    sp = int(request.form['sp'])  #stop profit
     
-    #creating plot of simulations
-    # plt.clf()
-    # plt.plot(mc.iloc[:, :10])
-    # strFile = 'crawler/static/images/new_plot2.png'
-    # if os.path.isfile(strFile):
-    #     os.remove(strFile)
-    # plt.savefig(strFile)
+    my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
+    df = my_csv_reader(my_label, form = 'd')
+
+    mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
 
     #creating trades for simulations
-    scenarios = run_bot_over_montes(mc, pda = 50, tr = trading_rules())
+    my_trading_rules = trading_rules(portfolio_size = 1000000 , trade_increment = 100000,
+                                        stop_loss = sl, stop_profit = sp, 
+                                        trend_follow1 = tf1, trend_follow2 = tf2,trend_follow3 = tf3,
+                                        mean_revert = False, trend_score = 0.8)
+    scenarios = my_trading_rules.run_bot_over_montes(mc, pda = 50)#, tr = my_trading_rules)
     results = []
     for scenario in scenarios:
         _ = scenario['p_and_l'][-1]
