@@ -23,6 +23,7 @@ def my_form_post():
     ltsm = int(request.form['ltsm'])  #trend to follow
     sl = int(request.form['sl'])  #stop loss
     sp = int(request.form['sp'])  #stop profit
+    mr = int(request.form['mr'])   #mean reversion
     
     my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
     df = my_csv_reader(my_label, form = 'd')
@@ -33,7 +34,7 @@ def my_form_post():
     my_trading_rules = trading_rules(portfolio_size = 1000000 , trade_increment = 100000,
                                         stop_loss = sl, stop_profit = sp, 
                                         trend_follow1 = tf1, trend_follow2 = tf2,trend_follow3 = tf3,
-                                        mean_revert = False, trend_score = 0.8)
+                                        mean_revert = mr,  mean_revert_inc = 1, trend_score = 0.8)
     scenarios = my_trading_rules.run_bot_over_montes(mc, pda = 50)#, tr = my_trading_rules)
     results = []
     for scenario in scenarios:

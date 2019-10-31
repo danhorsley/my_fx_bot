@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import random
 from tqdm import tqdm
 from sklearn.linear_model import LinearRegression
+from pandas.core.common import SettingWithCopyWarning
+import warnings
+warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 
 import datetime as dt     
 start_date = dt.date.today()
@@ -47,10 +50,11 @@ def monte_carlo(frame, sd = start_date, ed = end_date, n = nb_paths,detrend=True
 def plot_monte(mc, n = 15):
     return mc.iloc[:, 0:n].plot(figsize=(15,5))
 
-def p_and_l(mc, t ):
+def p_and_l(frame, t ):  #mc
     """generates position and p&l data"""
-    col_name = mc.columns[0]
-    frame = mc.copy()
+    #col_name = mc.columns[0]
+    col_name = frame.columns[0]
+    #frame = mc.copy()
     frame['trade'] = t
     frame['position'] = frame['trade'].cumsum()
     frame['position_value'] = frame[col_name] * frame['position']
@@ -58,12 +62,22 @@ def p_and_l(mc, t ):
     frame['p_and_l'] = frame['position_value']+frame['cost'].cumsum()
     return frame
 
+def make_reversion_columns(frame,pda=50, devs = 1, window =20):
+    my_close = frame.columns[0]
+    frame['sd'] = frame[my_close].rolling(window=pda).std()
+    frame['mov_av'] = frame[my_close].rolling(window=window).mean()
+    frame['devs_away'] = np.where(abs(frame['mov_av']-frame[my_close])>=frame['sd']*devs,1,0)
+    frame['b_or_s'] =np.where((frame['mov_av']-frame[my_close])>=0,1,-1)
+    frame['action'] = frame['devs_away'] * frame['b_or_s']
+    frame['mr_trade'] = frame['action']-frame['action'].shift(1)
+    return frame
+
 class trading_rules:
     """class to hold trading rules for bot"""
     def __init__(self,portfolio_size = 1000000 , trade_increment = 100000, 
                  stop_loss = -5, stop_profit = 10, 
                  trend_follow1=10, trend_follow2=30, trend_follow3=50,
-                 mean_revert=False, trend_score = 0.8,):
+                 mean_revert=False, mean_revert_inc = 0.5, trend_score = 0.8,):
         self.ps = portfolio_size
         self.ti = trade_increment
         self.sl = stop_loss
@@ -72,6 +86,8 @@ class trading_rules:
         self.tf2 = trend_follow2
         self.tf3 = trend_follow3
         self.mr = mean_revert
+        self.mr = mean_revert
+        self.mri =  mean_revert_inc
         self.ts = trend_score
         self.rsl = 0   #rolling stop loss
 
@@ -129,7 +145,11 @@ class trading_rules:
                 new_trade = 2*direction*self.ti
             else:
                 new_trade = direction*self.ti
-        
+        #make reversion trade - moving to make more efficient
+        # if self.mr !=0:
+        #     frame = make_reversion_columns(frame)
+        #     mr_trade = frame['mr_trade'][-1]*self.ps*self.mri
+        #     new_trade = new_trade + mr_trade
             
         return new_trade
 
@@ -139,10 +159,14 @@ class trading_rules:
         trade_histories = []
         for j in tqdm(range(len(monte_group.columns))):
             self.rsl = 0
-            monte = monte_group[[monte_group.columns[j]]]
+            monte = monte_group[[monte_group.columns[j]]].copy()
+            monte = make_reversion_columns(monte)
             no_trades = [0 for x in range(pda)]
             for i in range(len(monte)-pda):
-                new_trade = self.trade_generator(monte[:50+i],no_trades)#,t_rules =temp_tr)  #tr
+                new_trade = self.trade_generator(monte[:pda+i],no_trades)
+                #adding mean reversion here to try and speed up
+                mr_trade = monte['mr_trade'][pda+i] * self.mri*self.ps
+                new_trade = new_trade + mr_trade
                 no_trades.append(new_trade)
             trade_history = p_and_l(monte,no_trades)
             trade_histories.append(trade_history)
