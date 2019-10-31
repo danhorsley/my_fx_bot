@@ -136,7 +136,7 @@ def leader():
                                     Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
                                     Leaderboard.sim_number, Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
     my_query = pd.DataFrame(my_query)
-    print(my_query.head())
+    #print(my_query.head())
     my_query.columns= ['profit','id','mean reversion','trend1','trend2','trend3',
                         'stop_loss','stop_profit','currency','sim_number','ltsm']
     return render_template('leaderboard.html', name = 'Leaderboard', 
