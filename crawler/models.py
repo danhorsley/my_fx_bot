@@ -1,6 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-from .__init__ import DB
+from . import DB
 from time import time
+
+class User(DB.Model):
+    id = DB.Column(DB.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    email = DB.Column(DB.String(100), unique=True)
+    password = DB.Column(DB.String(100))
+    name = DB.Column(DB.String(1000))
 
 class Leaderboard(DB.Model):
     """Twitter users that we pull and analyse tweets for"""

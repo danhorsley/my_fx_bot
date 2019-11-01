@@ -1,21 +1,31 @@
-from flask import Flask, render_template, request, Response, jsonify
+from flask import Flask, render_template, request, Response, jsonify, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 #import matplotlib.pyplot as plt
 from .bot import *
 import os
 import pygal
 from pygal.style import Style
-from .__init__ import APP, DB
+from . import  DB  #APP,
 from .models import Leaderboard
 from time import time
 
-@APP.route('/')
-def root():
-    """render base.html"""
+main = Blueprint('main', __name__)  #changed @APPs to @main and / to home
+
+@main.route('/')
+def index():
+    return 'Index'
+
+@main.route('/profile')
+def profile():
+    return 'Profile'
+
+@main.route('/home')
+def home():
+    """render home screen"""
 
     return render_template('base.html')
 
-@APP.route('/', methods=['POST'])
+@main.route('/home', methods=['POST'])
 def my_form_post():
     ts = request.form['time_series']  #which currency
     sn = int(request.form['sim_number']) #number of mc sims to run
@@ -107,7 +117,7 @@ def my_form_post():
      pyg_b = pyg_bar)
 
 
-@APP.after_request
+@main.after_request
 def add_header(r):
     """
     Add headers to both force latest IE rendering engine or Chrome Frame,
@@ -120,7 +130,7 @@ def add_header(r):
     return r
 
 
-@APP.route('/db_reset')
+@main.route('/db_reset')
 def dbr():
     """fully reset models"""
     DB.drop_all()
@@ -128,7 +138,7 @@ def dbr():
 
     return 'db reset'
 
-@APP.route('/leaderboard')
+@main.route('/leaderboard')
 def leader():
     """fully reset models"""
     my_query = DB.session.query(Leaderboard.profit,Leaderboard.id, Leaderboard.mr,
