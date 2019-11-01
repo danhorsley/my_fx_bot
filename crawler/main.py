@@ -7,8 +7,9 @@ import os
 import pygal
 from pygal.style import Style
 from . import  DB  #APP,
-from .models import Leaderboard
+from .models import Leaderboard, Prices
 from time import time
+import json
 
 main = Blueprint('main', __name__)  #changed @APPs to @main and / to home
 
@@ -130,6 +131,26 @@ def dbr():
     DB.create_all()
 
     return 'db reset'
+
+@main.route('/pop_ccy')
+#@login_required
+def pop():
+    """populate historical currencirs"""
+    from forex_python.converter import CurrencyRates
+    import datetime as datetime
+
+    c = CurrencyRates()
+    numdays = 100
+    base = datetime.datetime.today()
+    date_list = [base - datetime.timedelta(days=x) for x in range(numdays)]
+    eurusd_dict = {}
+    for dat in date_list:
+        eurusd_dict[dat] =c.get_rate('EUR', 'USD', dat)
+    print(eurusd_dict)
+    ccy = Prices(id = 'EURUSD',data_json = eurusd_dict)
+    
+
+    return 'ccy popped'
 
 @main.route('/leaderboard')
 @login_required

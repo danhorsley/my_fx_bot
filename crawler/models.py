@@ -2,12 +2,33 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from . import DB
 from time import time
+#from SQLAlchemy.types import TypeDecorator
+import json
+SIZE = 1000
+class TextPickleType(DB.TypeDecorator):
+
+        impl = DB.Text(SIZE)
+
+        def process_bind_param(self, value, dialect):
+            if value is not None:
+                value = json.dumps(value)
+
+            return value
+
+        def process_result_value(self, value, dialect):
+            if value is not None:
+                value = json.loads(value)
+            return value
 
 class User(DB.Model, UserMixin):
     id = DB.Column(DB.Integer, primary_key=True) # primary keys are required by SQLAlchemy
     email = DB.Column(DB.String(100), unique=True)
     password = DB.Column(DB.String(100))
     name = DB.Column(DB.String(100))
+
+class Prices(DB.Model):
+    id = DB.Column(DB.String, primary_key=True) 
+    data_json = DB.Column(TextPickleType())
 
 class Leaderboard(DB.Model):
     """Twitter users that we pull and analyse tweets for"""
