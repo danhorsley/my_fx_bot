@@ -149,24 +149,25 @@ def pop():
     ccy_pair = ccy1 + ccy2
     pop_start = datetime.strptime(request.form['pop_start'],'%Y-%m-%d')
     pop_end = datetime.strptime(request.form['pop_end'],'%Y-%m-%d')
-    delta = pop_end - pop_start
-    date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+    min_date = datetime.strptime(DB.session.query(func.min(model_dict['EURUSD'].date)).all()[0][0],'%Y-%m-%d  00:00:00')
+    max_date = datetime.strptime(DB.session.query(func.max(model_dict['EURUSD'].date)).all()[0][0],'%Y-%m-%d  00:00:00')
 
-    #print(pop_start, pop_end)
+    min_range = min(pop_end,min_date) - min(min(pop_end,min_date),min_date) 
+    max_range = max(max(pop_start,max_date),pop_end)) - max(max_date,pop_start)
+    min_dates = [(pop_start+ timedelta(days = i)) for i in range(min_range.days)]
+    delta = pop_end - pop_start
+    #date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+
     c = CurrencyRates()
-    #numdays = 10
-    #base = datetime.datetime.today()
-    #date_list = [base - datetime.timedelta(days=x) for x in range(numdays)]
-    #price_dict = {}
+
     for dat in date_list:
-        _ = c.get_rate(ccy1, ccy2, dat)
-        #price_dict[str(dat)] =c.get_rate(ccy1, ccy2, dat)
-        ccy = model_dict[ccy_pair](date = dat, price = _)
-        DB.session.add(ccy)
-    DB.session.commit()
-    #print(eurusd_dict)
-    #ccy = Prices(id = 'EURUSD',data_json = eurusd_dict)
-    
+        if DB.session.query(model_dict[ccy_pair]).filter(model_dict[ccy_pair].date==dat).count() > 0:
+            pass
+        else:
+            _ = c.get_rate(ccy1, ccy2, dat)
+            ccy = model_dict[ccy_pair](date = dat, price = _)
+            DB.session.add(ccy)
+    DB.session.commit()  
 
     return 'ccy popped'
 
