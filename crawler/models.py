@@ -30,6 +30,17 @@ class Prices(DB.Model):
     id = DB.Column(DB.String, primary_key=True) 
     data_json = DB.Column(TextPickleType())
 
+# class Historical(DB.Model):
+#     date = DB.Column(DB.String(100), primary_key=True)
+#     price = DB.Column(DB.Float, nullable = False)
+
+class EURUSD(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
+model_dict = {"EURUSD" : EURUSD}
+
 class Leaderboard(DB.Model):
     """Twitter users that we pull and analyse tweets for"""
     id = DB.Column(DB.Float, primary_key=True)

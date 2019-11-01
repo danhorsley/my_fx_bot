@@ -7,7 +7,7 @@ import os
 import pygal
 from pygal.style import Style
 from . import  DB  #APP,
-from .models import Leaderboard, Prices
+from .models import Leaderboard, EURUSD, model_dict
 from time import time
 import json
 
@@ -133,21 +133,39 @@ def dbr():
     return 'db reset'
 
 @main.route('/pop_ccy')
+def pop_form():
+    return render_template('pop_ccy.html')
+
+
+@main.route('/pop_ccy', methods=['POST'])
 #@login_required
 def pop():
     """populate historical currencirs"""
     from forex_python.converter import CurrencyRates
-    import datetime as datetime
+    from datetime import datetime, timedelta
 
+    ccy1 = request.form['ccy1']
+    ccy2 = request.form['ccy2']
+    ccy_pair = ccy1 + ccy2
+    pop_start = datetime.strptime(request.form['pop_start'],'%Y-%m-%d')
+    pop_end = datetime.strptime(request.form['pop_end'],'%Y-%m-%d')
+    delta = pop_end - pop_start
+    date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+
+    #print(pop_start, pop_end)
     c = CurrencyRates()
-    numdays = 100
-    base = datetime.datetime.today()
-    date_list = [base - datetime.timedelta(days=x) for x in range(numdays)]
-    eurusd_dict = {}
+    #numdays = 10
+    #base = datetime.datetime.today()
+    #date_list = [base - datetime.timedelta(days=x) for x in range(numdays)]
+    #price_dict = {}
     for dat in date_list:
-        eurusd_dict[dat] =c.get_rate('EUR', 'USD', dat)
-    print(eurusd_dict)
-    ccy = Prices(id = 'EURUSD',data_json = eurusd_dict)
+        _ = c.get_rate(ccy1, ccy2, dat)
+        #price_dict[str(dat)] =c.get_rate(ccy1, ccy2, dat)
+        ccy = model_dict[ccy_pair](date = dat, price = _)
+        DB.session.add(ccy)
+    DB.session.commit()
+    #print(eurusd_dict)
+    #ccy = Prices(id = 'EURUSD',data_json = eurusd_dict)
     
 
     return 'ccy popped'

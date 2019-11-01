@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %}fx bot bot</title>
+<link rel="stylesheet" href="https://unpkg.com/picnic">
+<style type="text/css" media="screen">
+
+.myCoolButton {
+    background: #D0D3D4;
+}
+body {
+      background-color: #C0C0C0;
+    }
+</style>
+<body style="font-family: 'Inconsolata', monospace;">
+<!-- This is a nav bar -->
+
+<div style="overflow: hidden;width: 650px;height: 50px;"> <!-- For Demo, Represents the body -->
+<nav class="demo">
+  <a href="/" class="brand">
+    <img class="logo" src="static/images/bot.png" />
+    <span>FX Bot</span>
+  </a>
+  <!-- responsive-->
+  <input id="bmenub" type="checkbox" class="show">
+  <label for="bmenub" class="burger pseudo button">menu</label>
+
+  <div class="menu">
+    <a href="#" class="pseudo button icon-picture">under the hood</a>
+    <a href="leaderboard" class="button icon-puzzle">leaderboard</a>
+
+</nav>
+</div>
+
+<button class="myCoolButton">welcome {{name}}! </button>
+  <article class="card">
+  <header>
+    <h3>decide your currency pair and date range</h3>
+  </header>
+  <div class="flex one" style="width: 800px;height: 250pn">
+  <button class="myCoolButton">please select below...</button>
+  </div>
+  <form action="/pop_ccy" method='POST'>
+  
+  <div class="flex four" style="width: 800px;height: 250pn">
+  <h4 align="center"> currency 1 </h4>
+  <select name="ccy1" >
+    <option value="EUR">EUR</option>
+    <option value="USD">USD</option>
+    <option value="JPY">JPY</option>
+    <option value="GBP">GBP</option>
+  </select>
+    <h4 align="center"> currency 2 </h4>
+  <select name="ccy2" >
+    <option value="USD">USD</option>
+    <option value="JPY">JPY</option>
+    <option value="GBP">GBP</option>
+    <option value="EUR">EUR</option>
+  </select>
+  <h4 align="center"> start date </h4>
+  <input type="date" name="pop_start">
+ <h4 align="center"> end date </h4>
+  <input type="date" name="pop_end">
+    </div>
+  <div class="flex one" style="width: 800px;height: 250pn">
+  <input class='myCoolButton' value="submit" type="submit" align="center">
+     </div>
+
+  
+</form>
+</article>
+ 
+</body>
