@@ -12,3 +12,36 @@
 
     </tr> 
 {% endfor %}
+
+{% for item in ldr %}
+      <tr>    
+           <td>  {{ item }} </td>
+
+    </tr> 
+{% endfor %}
+
+<div style="overflow: hidden;height: 50px;"> <!-- For Demo, Represents the body -->
+
+<nav class="demo">
+  <a href="#" class="brand">
+    <img class="logo" src="static/images/bot.png" />
+    <span>FX Bot</span>
+  </a>
+  <!-- responsive-->
+  <input id="bmenub" type="checkbox" class="show">
+  <label for="bmenub" class="burger pseudo button">menu</label>
+
+  <div class="menu">
+    <a href="#" class="pseudo button icon-picture">Under the Hood</a>
+    <a href="#" class="button icon-puzzle">Leaderboard</a>
+
+</nav>
+  </div>
+  <h2>{{ name }}</h2>
+
+  <a href="{{ url_for('main.index') }}" class="navbar-item">
+    Home
+</a>
+<a href="{{ url_for('main.profile') }}" class="navbar-item">
+    Profile
+</a>

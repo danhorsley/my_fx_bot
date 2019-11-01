@@ -7,11 +7,12 @@ class User(DB.Model, UserMixin):
     id = DB.Column(DB.Integer, primary_key=True) # primary keys are required by SQLAlchemy
     email = DB.Column(DB.String(100), unique=True)
     password = DB.Column(DB.String(100))
-    name = DB.Column(DB.String(1000))
+    name = DB.Column(DB.String(100))
 
 class Leaderboard(DB.Model):
     """Twitter users that we pull and analyse tweets for"""
     id = DB.Column(DB.Float, primary_key=True)
+    name = DB.Column(DB.String(100),DB.ForeignKey('user.name'),nullable=False)
     ltsm = DB.Column(DB.Boolean, nullable = False)
     mr = DB.Column(DB.Boolean, nullable = False)
     trend1 = DB.Column(DB.Integer, nullable = False)
@@ -24,7 +25,8 @@ class Leaderboard(DB.Model):
     currency = DB.Column(DB.Text, nullable = False)
 
   
-    def __init__(self, id, ltsm, trend1, trend2, trend3, mr, stop_loss, stop_profit, profit, sim_number, currency):
+    def __init__(self, id, name, ltsm, trend1, trend2, trend3, mr, stop_loss, stop_profit, profit, sim_number, currency):
+        self.name = name
         self.id=time()
         self.ltsm = ltsm
         self.trend1 = trend1

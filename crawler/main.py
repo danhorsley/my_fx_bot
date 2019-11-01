@@ -102,7 +102,8 @@ def my_form_post():
     pyg_bar = bar_chart.render_data_uri()
 
     scenario_zero = scenarios[0]
-    leaderboard_entry = Leaderboard(id = time(),ltsm = ltsm, trend1 = tf1, trend2 = tf2, trend3 = tf3,
+    leaderboard_entry = Leaderboard(id = time(),name = current_user.name,ltsm = ltsm, 
+                                    trend1 = tf1, trend2 = tf2, trend3 = tf3,
                                      mr = mr, stop_loss = sl, stop_profit = sp, profit = avg_profit,
                                      sim_number = sn, currency = ts, )
 
@@ -120,18 +121,6 @@ def my_form_post():
      pyg_b = pyg_bar)
 
 
-@main.after_request
-def add_header(r):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
-
 
 @main.route('/db_reset')
 #@login_required
@@ -146,13 +135,13 @@ def dbr():
 @login_required
 def leader():
     """fully reset models"""
-    my_query = DB.session.query(Leaderboard.profit,Leaderboard.id, Leaderboard.mr,
+    my_query = DB.session.query(Leaderboard.profit,Leaderboard.name, Leaderboard.mr,
                                     Leaderboard.trend1,Leaderboard.trend2,Leaderboard.trend3, 
                                     Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
                                     Leaderboard.sim_number, Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
     my_query = pd.DataFrame(my_query)
     #print(my_query.head())
-    my_query.columns= ['profit','id','mean reversion','trend1','trend2','trend3',
+    my_query.columns= ['profit','name','mean reversion','trend1','trend2','trend3',
                         'stop_loss','stop_profit','currency','sim_number','ltsm']
     return render_template('leaderboard.html', name = 'Leaderboard', 
                                 ldr = [my_query.to_html(classes='data')],
