@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, Response, jsonify, Blueprint
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_required, current_user
 #import matplotlib.pyplot as plt
 from .bot import *
 import os
@@ -20,12 +21,14 @@ def profile():
     return 'Profile'
 
 @main.route('/home')
+@login_required
 def home():
     """render home screen"""
 
-    return render_template('base.html')
+    return render_template('home.html', name = current_user.name)
 
 @main.route('/home', methods=['POST'])
+@login_required
 def my_form_post():
     ts = request.form['time_series']  #which currency
     sn = int(request.form['sim_number']) #number of mc sims to run
@@ -131,6 +134,7 @@ def add_header(r):
 
 
 @main.route('/db_reset')
+#@login_required
 def dbr():
     """fully reset models"""
     DB.drop_all()
@@ -139,6 +143,7 @@ def dbr():
     return 'db reset'
 
 @main.route('/leaderboard')
+@login_required
 def leader():
     """fully reset models"""
     my_query = DB.session.query(Leaderboard.profit,Leaderboard.id, Leaderboard.mr,
