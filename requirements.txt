@@ -10,9 +10,7 @@ idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1
-mkl-fft==1.0.14
-mkl-random==1.1.0
-mkl-service==2.3.0
+mkl==2019.0
 numpy==1.17.2
 pandas==0.25.2
 pygal==2.4.0
