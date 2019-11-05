@@ -7,6 +7,8 @@ import pygal
 from pygal.style import Style
 from . import  DB  #APP,
 from .models import *#Leaderboard #, EURUSD, model_dict
+DB.create_all()
+DB.session.commit()
 from .dbtonumpy import *
 from time import time
 import json
