@@ -45,7 +45,7 @@ def my_form_post():
     my_label = ts
     df = my_csv_reader(my_label, form = 'd')
     eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
-#                                     dtype='float')
+                                         dtype='float')
 
     price_dict = {'EURUSD':eurusd_prices}
     my_arr = price_dict[my_label]
