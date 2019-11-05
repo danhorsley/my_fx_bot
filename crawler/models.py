@@ -4,7 +4,6 @@ from . import DB
 from time import time
 #from SQLAlchemy.types import TypeDecorator
 import json
-SIZE = 1000
 
 
 class User(DB.Model, UserMixin):
@@ -36,7 +35,7 @@ class EURJPY(DB.Model):#(Historical):
 model_dict = {"EURUSD" : EURUSD, "GBPUSD" : GBPUSD, "USDJPY" : USDJPY, "EURJPY" : EURJPY}
 
 class Leaderboard(DB.Model):
-    """Twitter users that we pull and analyse tweets for"""
+    """Leaderboard model storing best of the sims"""
     id = DB.Column(DB.Float, primary_key=True)
     name = DB.Column(DB.String(100),DB.ForeignKey('user.name'),nullable=False)
     ltsm = DB.Column(DB.Boolean, nullable = False)
@@ -66,9 +65,11 @@ class Leaderboard(DB.Model):
         self.currency = currency
     
     def __repr__(self):
-         return '<id {}, ltsm {}, trend {}, stop_l {},stop_p {},  profit{}, sims {} ccy {}>'.format(self.id,
+         return '<id {}, ltsm {}, trend1 {}, trend2 {},trend3 {},stop_l {},stop_p {},  profit{}, sims {} ccy {}>'.format(self.id,
                                                                                             self.ltsm,
-                                                                                            self.trend,
+                                                                                            self.trend1,
+                                                                                            self.trend2,
+                                                                                            self.trend3,
                                                                                             self.stop_loss,
                                                                                             self.stop_profit,
                                                                                             self.profit,
