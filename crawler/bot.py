@@ -6,7 +6,9 @@ from tqdm import tqdm
 from sklearn.linear_model import LinearRegression
 from pandas.core.common import SettingWithCopyWarning
 import warnings
+from .dbtonumpy import eurusd_prices
 warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
+from datetime import datetime, timedelta
 
 import datetime as dt     
 start_date = dt.date.today()
@@ -26,26 +28,46 @@ def my_csv_reader(file, form = 'd'):
     eurusd['returns'] = eurusd['close'].pct_change()
     return eurusd
 
-def monte_carlo(frame, sd = start_date, ed = end_date, n = nb_paths,detrend=True):
+# def monte_carlo(frame, sd = start_date, ed = end_date, n = nb_paths,detrend=True):
+#     """Monte carlo simulation for date range - start date and end date
+#     n is number of simualations
+#     detrend will take trend out of data - i.e. absolute all values and assign + or - to returns
+#     with 50/50 probability"""
+#     dates = pd.bdate_range(sd, ed)
+#     nb_dates = len(dates)
+#     sample_source = frame['returns'].values[1:]
+#     if detrend:
+#         ss = pd.Series(sample_source).abs()
+#         ones = pd.Series([random.choice([-1,1]) for x in range(len(ss))])
+#         ss = ss * ones
+#         sampled_returns = np.random.choice(ss, size=(nb_dates-1, n))
+#     else:
+#         sampled_returns = np.random.choice(sample_source, size=(nb_dates-1, n))
+#     df_returns = pd.DataFrame(sampled_returns, index=dates[1:])
+#     df_price = (1 + df_returns).cumprod(axis=0)
+#     df_price.loc[dates[0], :] = 1.0
+#     df_price.sort_index(inplace=True)
+#     df_price *= initial_price
+#     return df_price
+
+import datetime as dt
+def monte_carlo(arr=eurusd_prices, n_days=500, paths=5,detrend=True,starting_point = 1.1):
     """Monte carlo simulation for date range - start date and end date
     n is number of simualations
     detrend will take trend out of data - i.e. absolute all values and assign + or - to returns
-    with 50/50 probability"""
-    dates = pd.bdate_range(sd, ed)
-    nb_dates = len(dates)
-    sample_source = frame['returns'].values[1:]
+    with 50/50 probability - REFACTORED TO USE ARRAYS"""
+    rets = np.diff(arr,axis=0)/arr[:-1]
     if detrend:
-        ss = pd.Series(sample_source).abs()
-        ones = pd.Series([random.choice([-1,1]) for x in range(len(ss))])
+        ss = np.absolute(rets.reshape(1,-1))
+        ones = np.random.choice([-1,1],len(rets))
         ss = ss * ones
-        sampled_returns = np.random.choice(ss, size=(nb_dates-1, n))
+        sampled_returns = np.random.choice(ss[0], size=(n_days, paths)) + 1
     else:
-        sampled_returns = np.random.choice(sample_source, size=(nb_dates-1, n))
-    df_returns = pd.DataFrame(sampled_returns, index=dates[1:])
-    df_price = (1 + df_returns).cumprod(axis=0)
-    df_price.loc[dates[0], :] = 1.0
-    df_price.sort_index(inplace=True)
-    df_price *= initial_price
+      sampled_returns = np.random.choice(rets.reshape(1,-1)[0], size=(n_days, paths)) + 1
+    date_list = [(datetime.today() + timedelta(days = i)) for i in range(n_days)]
+    cum_returns = np.cumprod(sampled_returns,axis=0) * starting_point
+    df_price = pd.DataFrame(cum_returns, index = date_list)
+
     return df_price
 
 def plot_monte(mc, n = 15):

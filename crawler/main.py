@@ -8,6 +8,7 @@ import pygal
 from pygal.style import Style
 from . import  DB  #APP,
 from .models import Leaderboard, EURUSD, model_dict
+from .dbtonumpy import *
 from time import time
 import json
 
@@ -41,11 +42,12 @@ def my_form_post():
     sp = int(request.form['sp'])  #stop profit
     mr = int(request.form['mr'])   #mean reversion
     
-    my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
+    #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
+    my_label = ts
     df = my_csv_reader(my_label, form = 'd')
-
-    mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
-
+    my_arr = price_dict[my_label]
+    #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
+    mc = monte_carlo(my_arr,n_days=500, paths=sn,detrend=True,starting_point = 1.1)
     #creating trades for simulations
     my_trading_rules = trading_rules(portfolio_size = 1000000 , trade_increment = 100000,
                                         stop_loss = sl, stop_profit = sp, 
@@ -74,11 +76,11 @@ def my_form_post():
     line_chart.title = f'{sn} Monte Carlo {ts} simulations'
     bar_chart.title = 'profit and loss by simulation'
     line_chart.x_labels = ({
-                        'label': f'{start_date}',
-                        'value': start_date
+                        'label': f'{datetime.today()}',
+                        'value': datetime.today()
                         }, {
-                        'label': f'{end_date}',
-                        'value': end_date})
+                        'label': f'{datetime.today()+dt.timedelta(days=1*500)}',
+                        'value': datetime.today()+dt.timedelta(days=1*500)})
     bar_chart.y_labels = ({
                         'label': '-150k',
                         'value': -150000
