@@ -5,7 +5,7 @@ from tqdm import tqdm
 #from sklearn.linear_model import LinearRegression
 from pandas.core.common import SettingWithCopyWarning
 import warnings
-from .dbtonumpy import eurusd_prices
+#from .dbtonumpy import eurusd_prices
 warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
 from datetime import datetime, timedelta
 
