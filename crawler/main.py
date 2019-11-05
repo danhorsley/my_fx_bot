@@ -143,30 +143,55 @@ def pop():
     """populate historical currencirs"""
     from forex_python.converter import CurrencyRates
     from datetime import datetime, timedelta
+    from sqlalchemy.sql import func
 
     ccy1 = request.form['ccy1']
     ccy2 = request.form['ccy2']
     ccy_pair = ccy1 + ccy2
     pop_start = datetime.strptime(request.form['pop_start'],'%Y-%m-%d')
     pop_end = datetime.strptime(request.form['pop_end'],'%Y-%m-%d')
-    min_date = datetime.strptime(DB.session.query(func.min(model_dict['EURUSD'].date)).all()[0][0],'%Y-%m-%d  00:00:00')
-    max_date = datetime.strptime(DB.session.query(func.max(model_dict['EURUSD'].date)).all()[0][0],'%Y-%m-%d  00:00:00')
-
-    min_range = min(pop_end,min_date) - min(min(pop_end,min_date),min_date) 
-    max_range = max(max(pop_start,max_date),pop_end)) - max(max_date,pop_start)
-    min_dates = [(pop_start+ timedelta(days = i)) for i in range(min_range.days)]
-    delta = pop_end - pop_start
+    mind = DB.session.query(func.min(model_dict[ccy_pair].date)).all()[0][0]
+    maxd = DB.session.query(func.max(model_dict[ccy_pair].date)).all()[0][0]
+    if mind is not None:
+        min_date = datetime.strptime(mind,'%Y-%m-%d  00:00:00')
+    else:
+        min_date = datetime.min
+    if maxd is not None:
+        max_date = datetime.strptime(maxd,'%Y-%m-%d  00:00:00')
+    else:
+        max_date = datetime.min
+    print('currencies',ccy1,ccy2)
+    print(pop_end,pop_start,min_date,max_date)
+    if pop_end <= min_date or pop_start >= max_date:
+        delta = pop_end - pop_start
+        date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+    elif pop_start < min_date and pop_end <= max_date:
+        delta = min_date - pop_start - timedelta(days=1)
+        date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+    elif pop_start >= min_date and pop_end <=max_date:
+        delta = 0
+        date_list = []
+    elif pop_start < min_date and pop_end > max_date:
+        delta = min_date - pop_start - timedelta(days=1)
+        delta2 = pop_end - max_date - timedelta(days=1)
+        date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
+        date_list = date_list + [(max_date + timedelta(days = i)) for i in range(1,delta2.days+1)]
+    elif pop_start >= min_date and pop_end > max_date:
+        delta = pop_end - max_date  - timedelta(days=1)
+        date_list =[(max_date + timedelta(days = i)) for i in range(1,delta.days+1)]
+    #delta = pop_end - pop_start
     #date_list = [(pop_start + timedelta(days = i)) for i in range(delta.days+1)]
 
     c = CurrencyRates()
-
+    print(date_list)
     for dat in date_list:
-        if DB.session.query(model_dict[ccy_pair]).filter(model_dict[ccy_pair].date==dat).count() > 0:
-            pass
-        else:
-            _ = c.get_rate(ccy1, ccy2, dat)
-            ccy = model_dict[ccy_pair](date = dat, price = _)
-            DB.session.add(ccy)
+        print('datecheck',dat)
+        # if DB.session.query(model_dict[ccy_pair]).filter(model_dict[ccy_pair].date==dat).count() > 0:
+        #     pass
+        # else:
+        _ = c.get_rate(ccy1, ccy2, dat)
+        ccy = model_dict[ccy_pair](date = dat, price = _)
+        DB.session.add(ccy)
     DB.session.commit()  
 
     return 'ccy popped'

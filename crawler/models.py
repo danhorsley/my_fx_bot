@@ -39,7 +39,22 @@ class EURUSD(DB.Model):#(Historical):
     date = DB.Column(DB.String(100), primary_key=True)
     price = DB.Column(DB.Float, nullable = False)
 
-model_dict = {"EURUSD" : EURUSD}
+class GBPUSD(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
+class USDJPY(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
+class EURJPY(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
+model_dict = {"EURUSD" : EURUSD, "GBPUSD" : GBPUSD, "USDJPY" : USDJPY, "EURJPY" : EURJPY}
 
 class Leaderboard(DB.Model):
     """Twitter users that we pull and analyse tweets for"""
