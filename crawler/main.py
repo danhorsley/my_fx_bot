@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, Response, jsonify, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
-#import matplotlib.pyplot as plt
 from .bot import *
 import os
 import pygal

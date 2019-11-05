@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import random
 from tqdm import tqdm
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 from pandas.core.common import SettingWithCopyWarning
 import warnings
 from .dbtonumpy import eurusd_prices
@@ -27,6 +26,18 @@ def my_csv_reader(file, form = 'd'):
     eurusd = eurusd[['close']]
     eurusd['returns'] = eurusd['close'].pct_change()
     return eurusd
+
+def r2_score_and_slope(y):
+    """takes numpy array of prices and returns r2 score, slope and constant"""
+    y = np.array(y)
+    x = np.vstack([list(range(len(y))),np.ones(len(y))]).T
+    m, c = np.linalg.lstsq(x, y, rcond=None)[0]
+    y_hat = [(xx*m + c) for xx in list(range(len(y)))]
+    y_bar = np.sum(y)/len(y)
+    ssreg = np.sum((y_hat-y_bar)**2)   
+    sstot = np.sum((y - y_bar)**2)
+    r_2 = ssreg / sstot
+    return r_2, m, c
 
 # def monte_carlo(frame, sd = start_date, ed = end_date, n = nb_paths,detrend=True):
 #     """Monte carlo simulation for date range - start date and end date
@@ -69,9 +80,6 @@ def monte_carlo(arr=eurusd_prices, n_days=500, paths=5,detrend=True,starting_poi
     df_price = pd.DataFrame(cum_returns, index = date_list)
 
     return df_price
-
-def plot_monte(mc, n = 15):
-    return mc.iloc[:, 0:n].plot(figsize=(15,5))
 
 def p_and_l(frame, t ):  #mc
     """generates position and p&l data"""
@@ -124,16 +132,17 @@ class trading_rules:
             if period != 0:
                 slices.append(rg[-period:])
 
-        lr = LinearRegression()
+        # lr = LinearRegression()
         correl = []
         coeff = []
         for sl in slices:
-            X = np.array((sl.index -  sl.index[0]).days).reshape(-1,1)
-            y = sl[col_name].values
-            lr.fit(X,y)
-            scr = lr.score(X,y)
+            # X = np.array((sl.index -  sl.index[0]).days).reshape(-1,1)
+            y = np.array(sl[col_name].values)
+            # lr.fit(X,y)
+            # scr = lr.score(X,y)
+            scr, m, c = r2_score_and_slope(y)
             correl.append(scr)
-            coeff.append(lr.coef_[0])
+            coeff.append(m)
         #print(correl, coeff)
         return correl,coeff
 
