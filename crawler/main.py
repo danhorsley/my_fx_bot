@@ -6,7 +6,7 @@ import os
 import pygal
 from pygal.style import Style
 from . import  DB  #APP,
-from .models import Leaderboard, EURUSD, model_dict
+from .models import Leaderboard #, EURUSD, model_dict
 from .dbtonumpy import *
 from time import time
 import json
@@ -44,6 +44,10 @@ def my_form_post():
     #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
     my_label = ts
     df = my_csv_reader(my_label, form = 'd')
+    eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
+#                                     dtype='float')
+
+    price_dict = {'EURUSD':eurusd_prices}
     my_arr = price_dict[my_label]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
     mc = monte_carlo(my_arr,n_days=500, paths=sn,detrend=True,starting_point = 1.1)
