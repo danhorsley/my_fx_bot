@@ -57,6 +57,7 @@ dependencies:
   - zlib=1.2.11=h2fa13f4_1006
   - pip:
     - chardet==3.0.4
+    - config==0.4.2
     - forex-python==1.5
     - gunicorn==19.9.0
     - idna==2.8
