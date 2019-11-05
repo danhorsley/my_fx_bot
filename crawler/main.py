@@ -6,7 +6,7 @@ import os
 import pygal
 from pygal.style import Style
 from . import  DB  #APP,
-from .models import Leaderboard #, EURUSD, model_dict
+from .models import *#Leaderboard #, EURUSD, model_dict
 from .dbtonumpy import *
 from time import time
 import json
@@ -149,6 +149,7 @@ def pop():
     from forex_python.converter import CurrencyRates
     from datetime import datetime, timedelta
     from sqlalchemy.sql import func
+    from models import model_dict
 
     ccy1 = request.form['ccy1']
     ccy2 = request.form['ccy2']
