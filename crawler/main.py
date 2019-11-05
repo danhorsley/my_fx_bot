@@ -202,14 +202,14 @@ def pop():
 @login_required
 def leader():
     """fully reset models"""
-    my_query = DB.session.query(Leaderboard.profit,Leaderboard.name, Leaderboard.mr,
+    my_query = DB.session.query(Leaderboard.profit,Leaderboard.name, Leaderboard.sim_number,Leaderboard.mr,
                                     Leaderboard.trend1,Leaderboard.trend2,Leaderboard.trend3, 
                                     Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
-                                    Leaderboard.sim_number, Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
+                                     Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
     my_query = pd.DataFrame(my_query)
     #print(my_query.head())
-    my_query.columns= ['profit','name','mean reversion','trend1','trend2','trend3',
-                        'stop_loss','stop_profit','currency','sim_number','ltsm']
+    my_query.columns= ['average profit','name','number of sims','mean reversion','trend1','trend2','trend3',
+                        'stop_loss','stop_profit','currency','ltsm']
     return render_template('leaderboard.html', name = 'Leaderboard', 
                                 ldr = [my_query.to_html(classes='data')],
                                  titles = my_query.columns.values)
