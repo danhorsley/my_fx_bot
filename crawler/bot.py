@@ -62,7 +62,7 @@ def r2_score_and_slope(y):
 #     return df_price
 
 import datetime as dt
-def monte_carlo(arr=eurusd_prices, n_days=500, paths=5,detrend=True,starting_point = 1.1):
+def monte_carlo(arr, n_days=500, paths=5,detrend=True,starting_point = 1.1):
     """Monte carlo simulation for date range - start date and end date
     n is number of simualations
     detrend will take trend out of data - i.e. absolute all values and assign + or - to returns
