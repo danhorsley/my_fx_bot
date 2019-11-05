@@ -74,4 +74,4 @@ class Leaderboard(DB.Model):
                                                                                             self.stop_profit,
                                                                                             self.profit,
                                                                                             self.sim_number,
-                                                                                            self.ccy)
+                                                                                            self.currency)
