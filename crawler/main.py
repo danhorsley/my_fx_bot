@@ -43,7 +43,7 @@ def my_form_post():
     
     #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
     my_label = ts
-    df = my_csv_reader(my_label, form = 'd')
+    #df = my_csv_reader(my_label, form = 'd')
     eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
                                          dtype='float')
 
