@@ -73,5 +73,5 @@ class Leaderboard(DB.Model):
                                                                                             self.stop_loss,
                                                                                             self.stop_profit,
                                                                                             self.profit,
-                                                                                            self.sims,
+                                                                                            self.sim_number,
                                                                                             self.ccy)
