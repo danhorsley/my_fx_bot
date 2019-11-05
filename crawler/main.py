@@ -149,7 +149,6 @@ def pop():
     from forex_python.converter import CurrencyRates
     from datetime import datetime, timedelta
     from sqlalchemy.sql import func
-    from models import model_dict
 
     ccy1 = request.form['ccy1']
     ccy2 = request.form['ccy2']
