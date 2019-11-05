@@ -16,16 +16,16 @@ end_date = start_date + y
 nb_paths = 10
 initial_price = 1.10
 
-def my_csv_reader(file, form = 'd'):
-    """reads the csv file and converts the datetime into something useable"""
-    eurusd = pd.read_csv('EURUSD_1d.csv')
-    eurusd.columns= ['date','open','high','low','close','volume']
-    eurusd['date'] = eurusd['date'].str.replace(r"GMT[+-]\d+", "")
-    eurusd['date'] = pd.to_datetime(eurusd['date'],format='%d.%m.%Y %H:%M:%S.%f')#GMT')#+0100')
-    eurusd = eurusd.set_index('date',drop=True)
-    eurusd = eurusd[['close']]
-    eurusd['returns'] = eurusd['close'].pct_change()
-    return eurusd
+# def my_csv_reader(file, form = 'd'):
+#     """reads the csv file and converts the datetime into something useable"""
+#     eurusd = pd.read_csv('EURUSD_1d.csv')
+#     eurusd.columns= ['date','open','high','low','close','volume']
+#     eurusd['date'] = eurusd['date'].str.replace(r"GMT[+-]\d+", "")
+#     eurusd['date'] = pd.to_datetime(eurusd['date'],format='%d.%m.%Y %H:%M:%S.%f')#GMT')#+0100')
+#     eurusd = eurusd.set_index('date',drop=True)
+#     eurusd = eurusd[['close']]
+#     eurusd['returns'] = eurusd['close'].pct_change()
+#     return eurusd
 
 def r2_score_and_slope(y):
     """takes numpy array of prices and returns r2 score, slope and constant"""
