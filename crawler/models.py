@@ -5,34 +5,13 @@ from time import time
 #from SQLAlchemy.types import TypeDecorator
 import json
 SIZE = 1000
-class TextPickleType(DB.TypeDecorator):
 
-        impl = DB.Text(SIZE)
-
-        def process_bind_param(self, value, dialect):
-            if value is not None:
-                value = json.dumps(value)
-
-            return value
-
-        def process_result_value(self, value, dialect):
-            if value is not None:
-                value = json.loads(value)
-            return value
 
 class User(DB.Model, UserMixin):
     id = DB.Column(DB.Integer, primary_key=True) # primary keys are required by SQLAlchemy
     email = DB.Column(DB.String(100), unique=True)
     password = DB.Column(DB.String(100))
     name = DB.Column(DB.String(100))
-
-class Prices(DB.Model):
-    id = DB.Column(DB.String, primary_key=True) 
-    data_json = DB.Column(TextPickleType())
-
-# class Historical(DB.Model):
-#     date = DB.Column(DB.String(100), primary_key=True)
-#     price = DB.Column(DB.Float, nullable = False)
 
 class EURUSD(DB.Model):#(Historical):
     #__bind_key__ = "EURUSD"
