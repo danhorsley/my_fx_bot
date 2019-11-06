@@ -41,5 +41,7 @@ The reader will undoubtably have noticed that there is no point testing the succ
 
 Other improvements would be to add hourly or minutely data, non FX related securities, more complex calculation intensive strategies (heroku really limits these) and also an update system to alert users when thier preferred strategy is indicating a buy or a sell or when they should be takign profit on an exiting trade.  Also we would liek to expolre more complex strategy logic (i.e. trades in multiple securities given certain conditions).
 
+Also the profit and loss model does not currently include carry - i.e. the difference in interest rates between the thw currencies. For example at the moment the Euro has a deposit rate of -0.4% while the Dollar has a deposit rate of 1.89% giving a differential of 2.29%.  This means you are 2.29% a year worse off holding Euros for the year than Dollars, which adds up a lot over time especially if you are using leverage.  Long term trades just to pick up the carry iw a well known strategy in FX markets and it wouldn't be too difficult to implement the correct p&l and carry as a strategy in teh future.
+
 
 
