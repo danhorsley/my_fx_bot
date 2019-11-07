@@ -213,11 +213,19 @@ def leader():
                                     Leaderboard.trend1,Leaderboard.trend2,Leaderboard.trend3, 
                                     Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
                                      Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
-    my_query = pd.DataFrame(my_query)
+    #my_query = pd.DataFrame(my_query)
     #print(my_query.head())
-    my_query.columns= ['average profit','name','number of sims','mean reversion','trend1','trend2','trend3',
+    cols= ['average profit','name','number of sims','mean reversion','trend1','trend2','trend3',
                         'stop_loss','stop_profit','currency','ltsm']
-    return render_template('leaderboard.html', name = 'Leaderboard', 
-                                ldr = [my_query.to_html(classes='data')],
-                                 titles = my_query.columns.values)
-    
+    # return render_template('leaderboard.html', name = 'Leaderboard', 
+    #                             ldr = [my_query.to_html(classes='data')],
+    #                              titles = my_query.columns.values)
+    return render_template('leaderboard.html', my_query = my_query, titles =cols)
+
+@main.route('/underhood')
+@login_required
+def underhood():
+    import markdown2
+    f = open('README.md', 'r')
+    htmlmarkdown=markdown2.markdown( f.read() )
+    return render_template('underhood.html', md = htmlmarkdown)
