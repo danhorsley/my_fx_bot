@@ -33,7 +33,8 @@ def home():
 @login_required
 def my_form_post():
     ts = request.form['time_series']  #which currency
-    sn = int(request.form['sim_number']) #number of mc sims to run
+    sn = int(request.form['sim_number'])
+    nd = int(request.form['num_days']) #number of mc sims to run
     tf1 = int(request.form['tf1'])  #trend to follow 1
     tf2 = int(request.form['tf2'])  #trend to follow 2
     tf3 = int(request.form['tf3'])  #trend to follow 3
@@ -53,7 +54,7 @@ def my_form_post():
     my_arr = price_dict[my_label]
     returns = np.diff(my_arr,axis=0)/my_arr[:-1]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
-    mc = monte_carlo(returns,n_days=500, paths=sn,detrend=True,starting_point = 1.1)
+    mc = monte_carlo(returns,n_days=nd, paths=sn,detrend=True,starting_point = 1.1)
     #creating trades for simulations
     my_trading_rules = trading_rules(portfolio_size = 1000000 , trade_increment = 100000,
                                         stop_loss = sl, stop_profit = sp, 
@@ -111,7 +112,7 @@ def my_form_post():
     pyg_chart = line_chart.render_data_uri()
     pyg_bar = bar_chart.render_data_uri()
 
-    texty = make_text(ts,sn,tf1,tf2,tf3,ltsm,mr,sl,sp)
+    texty = make_text(ts,sn,nd,tf1,tf2,tf3,ltsm,mr,sl,sp)
 
     #scenario_zero = scenarios[0]
     leaderboard_entry = Leaderboard(id = time(),name = current_user.name,ltsm = ltsm, 

@@ -1,4 +1,4 @@
-def make_text(ts,sims,tf1,tf2,tf3,ltsm,mr,sl,sp):
+def make_text(ts,sims,nd,tf1,tf2,tf3,ltsm,mr,sl,sp):
 
     if tf1==tf2==tf3==0:
         trends = 'no trend following'
@@ -16,7 +16,7 @@ def make_text(ts,sims,tf1,tf2,tf3,ltsm,mr,sl,sp):
 
     
 
-    ret = f'''Your simulation generated {sims} scenarios on {ts} for which you combined {trends},
+    ret = f'''Your simulation generated {sims} scenarios on {ts} over {nd} days for which you combined {trends},
      {means} and excercised stop losses at {abs(sl)}% drawdown and stop profit at 
      {sp}% return'''
 
