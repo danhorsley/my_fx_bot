@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, jsonify, Blueprint
+from flask import Flask, render_template, request, Response, jsonify, Blueprint, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
 from .bot import *
@@ -12,16 +12,15 @@ DB.session.commit()
 from .dbtonumpy import *
 from time import time
 import json
+from .text_gen import *
+
 
 main = Blueprint('main', __name__)  #changed @APPs to @main and / to home
 
 @main.route('/')
 def index():
-    return 'Index'
-
-@main.route('/profile')
-def profile():
-    return 'Profile'
+    #return 'Index'
+    return redirect("/home", code=302)
 
 @main.route('/home')
 @login_required
@@ -46,10 +45,11 @@ def my_form_post():
     #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
     my_label = ts
     #df = my_csv_reader(my_label, form = 'd')
-    eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
-                                         dtype='float')
+    # eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
+    #                                      dtype='float')
 
-    price_dict = {'EURUSD':eurusd_prices}
+    # price_dict = {'EURUSD':eurusd_prices}
+    
     my_arr = price_dict[my_label]
     returns = np.diff(my_arr,axis=0)/my_arr[:-1]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
@@ -111,11 +111,13 @@ def my_form_post():
     pyg_chart = line_chart.render_data_uri()
     pyg_bar = bar_chart.render_data_uri()
 
+    texty = make_text(ts,sn,tf1,tf2,tf3,ltsm,mr,sl,sp)
+
     #scenario_zero = scenarios[0]
     leaderboard_entry = Leaderboard(id = time(),name = current_user.name,ltsm = ltsm, 
                                     trend1 = tf1, trend2 = tf2, trend3 = tf3,
                                      mr = mr, stop_loss = sl, stop_profit = sp, profit = avg_profit,
-                                     sim_number = sn, currency = ts, )
+                                     sim_number = sn, currency = ts)
 
     
     DB.session.add(leaderboard_entry)
@@ -126,6 +128,7 @@ def my_form_post():
      #tables = [scenario_zero.to_html(classes='data')], 
      #titles = scenario_zero.columns.values,
      results = results,
+     texty = texty,
      #scenario_z = scenario_zero,
      pyg = pyg_chart,
      pyg_b = pyg_bar)

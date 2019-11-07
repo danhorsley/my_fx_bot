@@ -22,6 +22,11 @@ class GBPUSD(DB.Model):#(Historical):
     date = DB.Column(DB.String(100), primary_key=True)
     price = DB.Column(DB.Float, nullable = False)
 
+class GBPJPY(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
 class USDJPY(DB.Model):#(Historical):
     #__bind_key__ = "EURUSD"
     date = DB.Column(DB.String(100), primary_key=True)
