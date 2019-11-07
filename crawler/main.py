@@ -67,7 +67,7 @@ def my_form_post():
     custom_style = Style(
         label_font_size=20,
         major_label_font_size = 20,
-        legend_font_size=20,
+        legend_font_size=14,
         title_font_size=30,
         font_family = 'googlefont:Inconsolata')
 
