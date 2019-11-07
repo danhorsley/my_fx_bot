@@ -43,15 +43,8 @@ def my_form_post():
     sp = int(request.form['sp'])  #stop profit
     mr = int(request.form['mr'])   #mean reversion
     ps = 1000000
-    
-    #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
-    my_label = ts
-    #df = my_csv_reader(my_label, form = 'd')
-    # eurusd_prices = np.array(DB.session.query(EURUSD.price).order_by(asc(EURUSD.date)).all(),
-    #                                      dtype='float')
+    pda = 50
 
-    # price_dict = {'EURUSD':eurusd_prices}
-    
     my_arr = price_dict[ts]
     returns = np.diff(my_arr,axis=0)/my_arr[:-1]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
@@ -61,7 +54,7 @@ def my_form_post():
                                         stop_loss = sl, stop_profit = sp, 
                                         trend_follow1 = tf1, trend_follow2 = tf2,trend_follow3 = tf3,
                                         mean_revert = mr,  mean_revert_inc = 1, trend_score = 0.8)
-    scenarios = my_trading_rules.run_bot_over_montes(mc, pda = 50)#, tr = my_trading_rules)
+    scenarios = my_trading_rules.run_bot_over_montes(mc, pda = pda)#, tr = my_trading_rules)
     results = []
     for scenario in scenarios:
         _ = scenario[0][-1]
@@ -80,9 +73,11 @@ def my_form_post():
 
     line_chart = pygal.Line(width=1000,height=500, style = custom_style, show_dots=False)   
     bar_chart = pygal.Bar(width=1150, style = custom_style) 
+    trading_chart = pygal.Line(width=1000,height=500, style = custom_style, show_dots=False) 
 
     line_chart.title = f'{sn} Monte Carlo {ts} simulations'
     bar_chart.title = 'profit and loss by simulation'
+    trading_chart.title = f'p&l over time by simulation'
     # line_chart.x_labels = ({
     #                     'label': f'{datetime.today()}',
     #                     'value': datetime.today()
@@ -108,15 +103,16 @@ def my_form_post():
         #print(mc[1][:,n])
         line_chart.add(f'simulation {n + 1}',  mc[1][:,n], show_only_major_dots=True)  #change here 
         bar_chart.add(f'simulation {n + 1}', my_dict[n+1])
+        trading_chart.add(f'simulation {n + 1}',  scenarios[n][0][pda:], show_only_major_dots=True) 
     avg_profit = int(sum(my_dict.values())/len(my_dict))
     bar_chart.add(f'average', avg_profit)
     pyg_chart = line_chart.render_data_uri()
     pyg_bar = bar_chart.render_data_uri()
+    trad_chart = trading_chart.render_data_uri()
 
     texty = make_text(ts,sn,nd,tf1,tf2,tf3,ltsm,mr,sl,sp,
                 100*avg_profit/ps, 100*min(results)/ps, 100*max(results)/ps)
 
-    #scenario_zero = scenarios[0]
     leaderboard_entry = Leaderboard(id = time(),name = current_user.name,ltsm = ltsm, 
                                     trend1 = tf1, trend2 = tf2, trend3 = tf3,
                                      mr = mr, stop_loss = sl, stop_profit = sp, profit = avg_profit,
@@ -126,15 +122,12 @@ def my_form_post():
     DB.session.add(leaderboard_entry)
     DB.session.commit()
 
-    return render_template('plot_render.html', name = 'Simulation Results',
-    #  url ='static/images/new_plot2.png',
-     #tables = [scenario_zero.to_html(classes='data')], 
-     #titles = scenario_zero.columns.values,
-     results = results,
-     texty = texty,
-     #scenario_z = scenario_zero,
-     pyg = pyg_chart,
-     pyg_b = pyg_bar)
+    return render_template('plot_render.html', name = 'Simulation Results', 
+                                                results = results,
+                                                texty = texty,
+                                                pyg = pyg_chart,
+                                                pyg_b = pyg_bar,
+                                                trad = trad_chart)
 
 
 
