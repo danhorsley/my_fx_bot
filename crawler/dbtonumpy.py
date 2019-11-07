@@ -26,3 +26,7 @@ gbpjpy_prices = np.array(DB.session.query(GBPJPY.price).order_by(asc(GBPJPY.date
 price_dict = {'EURUSD':eurusd_prices, 'USDJPY':usdjpy_prices, 
                 'EURJPY':eurjpy_prices, 'GBPUSD':gbpusd_prices,
                 'GBPJPY':gbpjpy_prices}
+
+last_price_dict = {'EURUSD':eurusd_prices[-1], 'USDJPY':usdjpy_prices[-1], 
+                'EURJPY':eurjpy_prices[-1], 'GBPUSD':gbpusd_prices[-1],
+                'GBPJPY':gbpjpy_prices[-1]}

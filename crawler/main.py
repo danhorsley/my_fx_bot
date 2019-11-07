@@ -42,6 +42,7 @@ def my_form_post():
     sl = int(request.form['sl'])  #stop loss
     sp = int(request.form['sp'])  #stop profit
     mr = int(request.form['mr'])   #mean reversion
+    ps = 1000000
     
     #my_label = f'{ts}_1d.csv'  #read the time series csv - #TODO change this to Model in Heroku
     my_label = ts
@@ -51,12 +52,12 @@ def my_form_post():
 
     # price_dict = {'EURUSD':eurusd_prices}
     
-    my_arr = price_dict[my_label]
+    my_arr = price_dict[ts]
     returns = np.diff(my_arr,axis=0)/my_arr[:-1]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
-    mc = monte_carlo(returns,n_days=nd, paths=sn,detrend=True,starting_point = 1.1)
+    mc = monte_carlo(returns,n_days=nd, paths=sn,detrend=True,starting_point = last_price_dict[ts])
     #creating trades for simulations
-    my_trading_rules = trading_rules(portfolio_size = 1000000 , trade_increment = 100000,
+    my_trading_rules = trading_rules(portfolio_size = ps , trade_increment = 100000,
                                         stop_loss = sl, stop_profit = sp, 
                                         trend_follow1 = tf1, trend_follow2 = tf2,trend_follow3 = tf3,
                                         mean_revert = mr,  mean_revert_inc = 1, trend_score = 0.8)
@@ -112,7 +113,8 @@ def my_form_post():
     pyg_chart = line_chart.render_data_uri()
     pyg_bar = bar_chart.render_data_uri()
 
-    texty = make_text(ts,sn,nd,tf1,tf2,tf3,ltsm,mr,sl,sp)
+    texty = make_text(ts,sn,nd,tf1,tf2,tf3,ltsm,mr,sl,sp,
+                100*avg_profit/ps, 100*min(results)/ps, 100*max(results)/ps)
 
     #scenario_zero = scenarios[0]
     leaderboard_entry = Leaderboard(id = time(),name = current_user.name,ltsm = ltsm, 
