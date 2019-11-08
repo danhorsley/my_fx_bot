@@ -45,10 +45,10 @@ def my_form_post():
     ps = 1000000
     pda = 50
 
-    my_arr = price_dict[ts]
+    my_arr = create_price(ts)
     returns = np.diff(my_arr,axis=0)/my_arr[:-1]
     #mc = monte_carlo(df, sd = start_date, ed = end_date, n = sn, detrend = True)
-    mc = monte_carlo(returns,n_days=nd, paths=sn,detrend=True,starting_point = last_price_dict[ts])
+    mc = monte_carlo(returns,n_days=nd, paths=sn,detrend=True,starting_point = my_arr[-1])
     #creating trades for simulations
     my_trading_rules = trading_rules(portfolio_size = ps , trade_increment = 100000,
                                         stop_loss = sl, stop_profit = sp, 
