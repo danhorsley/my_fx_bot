@@ -6,8 +6,8 @@
 <div style="overflow: hidden;height: 50px;"> <!-- For Demo, Represents the body -->
 
 <nav class="demo">
-  <a href="#" class="brand">
-    <img class="logo" src="static/images/bot.png" />
+  <a href="home" class="brand">
+    <img href="home" class="logo" src="static/images/bot.png" />
     <span>FX Bot</span>
   </a>
   <!-- responsive-->
@@ -15,14 +15,14 @@
   <label for="bmenub" class="burger pseudo button">menu</label>
 
   <div class="menu">
-    <a href="#" class="pseudo button icon-picture">Under the Hood</a>
+    <a href="/underhood" class="pseudo button icon-picture">Under the Hood</a>
     <a href="/leaderboard" class="button icon-puzzle">Leaderboard</a>
 
 </nav>
   </div>
        <h2>{{ name }}</h2>
 
-
+<p> {{texty}} </p>
 <!-- Charts -->   
 <div id="chart">
    <embed type="image/svg+xml" src= {{ pyg|safe }} width="1000" height="400" />
@@ -35,10 +35,14 @@
 </div>
 
 <br> </br>
-{% for table in tables %}
+
+<div id="chart">
+      <embed type="image/svg+xml" src= {{ trad|safe }} width="1000" height="400" />
+   </div>
+<!-- {% for table in tables %}
             {{titles[loop.index]}}
             {{ table|safe }}
-{% endfor %}
+{% endfor %} -->
 </div>
    </body>
 </html>

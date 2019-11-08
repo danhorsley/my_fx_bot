@@ -13,18 +13,19 @@ body {
 <body style="font-family: 'Inconsolata', monospace;">
 <!-- This is a nav bar -->
 
-<div style="overflow: hidden;width: 650px;height: 50px;"> <!-- For Demo, Represents the body -->
-<nav class="demo">
-  <a href="/" class="brand">
-    <img class="logo" src="static/images/bot.png" />
+<div style="overflow: hidden;width: 650px;height: 50px;"> 
+
+<nav  style="width: 650px">
+  <a href="home" class="brand">
+    <img href="home" class="logo" src="static/images/bot.png" />
     <span>FX Bot</span>
   </a>
   <!-- responsive-->
-  <input id="bmenub" type="checkbox" class="show">
-  <label for="bmenub" class="burger pseudo button">menu</label>
+  <!-- <input id="bmenub" type="checkbox" class="show">
+  <label for="bmenub" class="burger pseudo button">menu</label> -->
 
   <div class="menu">
-    <a href="#" class="pseudo button icon-picture">under the hood</a>
+    <a href="underhood" class="pseudo button icon-picture">under the hood</a>
     <a href="leaderboard" class="button icon-puzzle">leaderboard</a>
 
 </nav>
@@ -47,18 +48,28 @@ body {
     <option value="USDJPY">USDJPY</option>
     <option value="EURJPY">EURJPY</option>
     <option value="GBPUSD">GBPUSD</option>
+    <option value="GBPJPY">GBPJPY</option>
   </select>
   <h4 align="center"> simulations</h4>
   <select name="sim_number">
-    <option value= 1 > 1 </option>
+    <option value= 3 > 3 </option>
     <option value= 5 > 5 </option>
     <option value= 10 > 10 </option>
-    <option value= 25 > 25 </option>
-    <option value= 50 > 50 </option>
+    <option value= 15 > 15 </option>
+    <option value= 20 > 20 </option>
+  </select>
+  <h4 align="center"> number of days</h4>
+  <select name="num_days">
+    <option value= 100 > 100 </option>
+    <option value= 200 > 200 </option>
+    <option value= 500 > 500 </option>
+    <option value= 1000 > 1000 </option>
+    <option value= 1500 > 1500 </option>
   </select>
    <h4 align="center"> trend follow 1</h4>
   <select name="tf1">
     <option value= 0 > None </option>
+    <option value= 5 > 5 </option>
     <option value= 10 > 10 </option>
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>
@@ -66,6 +77,7 @@ body {
      <h4 align="center"> trend follow 2</h4>
   <select name="tf2">
     <option value= 0 > None </option>
+    <option value= 5 > 5 </option>
     <option value= 10 > 10 </option>
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>
@@ -73,6 +85,7 @@ body {
      <h4 align="center"> trend follow 3</h4>
   <select name="tf3">
     <option value= 0 > None </option>
+    <option value= 5 > 5 </option>
     <option value= 10 > 10 </option>
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>

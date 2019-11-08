@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %}fx bot bot</title>
+<link rel="stylesheet" href="https://unpkg.com/picnic">
+<style type="text/css" media="screen">
+
+.myCoolButton {
+    background: #D0D3D4;
+}
+body {
+      background-color: #C0C0C0;
+    }
+</style>
+<body style="font-family: 'Inconsolata', monospace;">
+<!-- This is a nav bar -->
+
+<div style="overflow: hidden;width: 650px;height: 50px;"> <!-- For Demo, Represents the body -->
+<nav class="demo">
+  <a href="/" class="brand">
+    <img class="logo" src="static/images/bot.png" />
+    <span>FX Bot</span>
+  </a>
+  <!-- responsive-->
+  <input id="bmenub" type="checkbox" class="show">
+  <label for="bmenub" class="burger pseudo button">menu</label>
+
+  <div class="menu">
+    <a href="#" class="pseudo button icon-picture">under the hood</a>
+    <a href="leaderboard" class="button icon-puzzle">leaderboard</a>
+
+</nav>
+</div>
+
+<h1> WAITING FOR CALC ! </h1>
+   </body>
+</html>
+
+<script>
+    setTimeout(function(){
+        window.location.href = "/results";
+    }, 2000);
+</script>

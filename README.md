@@ -12,7 +12,7 @@ In foreign exchange land, a currency's price is only referenced with respect to 
 
 ## What is a Monte Carlo simulation?
 
-Just a fancy way of saying we use past events to predict possoble future scenarios.  Imagine every day from a period in the past is represented by a number on a (large!) roulette wheel.  We then spin that wheel multiple times to generate a possible future, with each spin representing the next day in the future.  Obviously this aprroach is not flawless as certain types of days can 'chain' together in reality (see 'Possible Improvements' section below) and the future is never an exact replication of the past.  Despite these problems, it is a very useful tool for testing trading strategies, portfolio construction and risk limits.
+Just a fancy way of saying we use past events to predict possible future scenarios.  Imagine every day from a period in the past is represented by a number on a (large!) roulette wheel.  We then spin that wheel multiple times to generate a possible future, with each spin representing the next day in the future.  Obviously this aprroach is not flawless as certain types of days can 'chain' together in reality (see 'Possible Improvements' section below) and the future is never an exact replication of the past.  Despite these problems, it is a very useful tool for testing trading strategies, portfolio construction and risk limits.
 
 ## What is a trend following strategy?
 
@@ -21,15 +21,15 @@ The premise that if things are goign one way, they tend to keep goign that way! 
 ## What is a mean reversion strategy?
 
 This strategy attempts to take advantage of market participants habit of over-reacting in the short term.
-Generally short-term in nature these trade strategies use several approaches.  FX Bot uses one of the simplest : when the current price is over one standard deviation away from the rolling average a trade is inititaed looking to profit from the current price closing the gap to the moving average.
+Generally short-term in nature these trade strategies use several approaches.  FX Bot uses one of the simplest : when the current price is over one standard deviation away from the rolling average a trade is initiated looking to profit from the current price closing the gap to the moving average.
 
 ## How does FX Bot work?
 
-Initially it relied heavily on the Pandas library.  However this libarary is computationally slow and hit up against the maximum request time length (30 seconds) but also slug size on Heroku (soft limit 300Mb, hard limit 500Mb).  The code was refactored to use Numpy exclusively and also we used our own function for the linear regression function (initially we used the function in the scikit-learn library)
+At first FX Bot relied heavily on the Pandas library.  However this libarary is computationally slow and hit up against the maximum request time length (30 seconds) but also slug size on Heroku (soft limit 300Mb, hard limit 500Mb).  The code was refactored to use Numpy exclusively and also we used our own function for the linear regression function (initially we used the function in the scikit-learn library).  Run time is now multiple (>10x) times faster.
 
 ## What is a stop-loss and a stop-profit?
 
-These trades can be summed up as respectively "stop the ride i want to get off" and "quitting while you are ahead".   A stop loss triggers a whole or partial close of your portfolio when you lose a certain amount of money (in this case the default is 5% of your portfolio starting values).  A stop-profit is the opposite when you bank your returns if you find yourself doign very well.  The stop-loss is an incredibly common risk-management tool to limit portfolio losses (especially in times of market stress), though it can be taken advantage of.  Many market participants simply wait for others to stop-loss they can buy at artifically low levels.
+These trades can be summed up as respectively "stop the ride I want to get off" and "quitting while you are ahead".   A stop loss triggers a whole or partial close of your portfolio when you lose a certain amount of money (in this case the default is 5% of your portfolio starting values).  A stop-profit is the opposite when you bank your returns if you find yourself doign very well.  The stop-loss is an incredibly common risk-management tool to limit portfolio losses (especially in times of market stress), though it can be taken advantage of.  Many market participants simply wait for others to stop-loss they can buy at artifically low levels.
 
 ## Where do you get the data from?
 

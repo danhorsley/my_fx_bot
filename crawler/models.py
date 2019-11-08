@@ -22,6 +22,11 @@ class GBPUSD(DB.Model):#(Historical):
     date = DB.Column(DB.String(100), primary_key=True)
     price = DB.Column(DB.Float, nullable = False)
 
+class GBPJPY(DB.Model):#(Historical):
+    #__bind_key__ = "EURUSD"
+    date = DB.Column(DB.String(100), primary_key=True)
+    price = DB.Column(DB.Float, nullable = False)
+
 class USDJPY(DB.Model):#(Historical):
     #__bind_key__ = "EURUSD"
     date = DB.Column(DB.String(100), primary_key=True)
@@ -32,7 +37,7 @@ class EURJPY(DB.Model):#(Historical):
     date = DB.Column(DB.String(100), primary_key=True)
     price = DB.Column(DB.Float, nullable = False)
 
-model_dict = {"EURUSD" : EURUSD, "GBPUSD" : GBPUSD, "USDJPY" : USDJPY, "EURJPY" : EURJPY}
+model_dict = {"EURUSD" : EURUSD, "GBPUSD" : GBPUSD, "GBPJPY" : GBPJPY,"USDJPY" : USDJPY, "EURJPY" : EURJPY}
 
 class Leaderboard(DB.Model):
     """Leaderboard model storing best of the sims"""

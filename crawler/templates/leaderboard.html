@@ -7,8 +7,8 @@
 <div style="overflow: hidden;height: 50px;"> <!-- For Demo, Represents the body -->
 
 <nav class="demo">
-  <a href="/" class="brand">
-    <img class="logo" src="static/images/bot.png" />
+  <a href="home" class="brand">
+    <img href="home" class="logo" src="static/images/bot.png" />
     <span>FX Bot</span>
   </a>
   <!-- responsive-->
@@ -16,17 +16,31 @@
   <label for="bmenub" class="burger pseudo button">menu</label>
 
   <div class="menu">
-    <a href="#" class="pseudo button icon-picture">under the hood</a>
-    <a href="" class="button icon-puzzle">leaderboard</a>
+    <a href="/underhood" class="pseudo button icon-picture">under the hood</a>
+    <a href="/leaderboard" class="button icon-puzzle">leaderboard</a>
 
 </nav>
   </div>
   <h2>{{ name }}</h2>
-
-{% for table in ldr %}
-            {{titles[loop.index]}}
-            {{ table|safe }}
-{% endfor %}
+  <table>
+  {% for item in my_query %}
+  {{titles[loop.index]}}
+  <tr>
+     
+      <td>{{item[0]}}</td>
+      <td>{{item[1]}}</td>
+      <td>{{item[2]}}</td>
+      <td>{{item[3]}}</td>
+      <td>{{item[4]}}</td>
+      <td>{{item[5]}}</td>
+      <td>{{item[6]}}</td>
+      <td>{{item[7]}}</td>
+      <td>{{item[8]}}</td>
+      <td>{{item[9]}}</td>
+      <td>{{item[10]}}</td>
+  </tr>
+  {% endfor %}
+</table>
 
    </body>
 </html>
