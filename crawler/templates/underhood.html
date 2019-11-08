@@ -19,7 +19,40 @@
 body {
       background-color: #F8F9F9;
     }
+
+#top, #bottom, #left, #right {
+	background: #566573;
+	position: fixed;
+	}
+	#left, #right {
+		top: 0; bottom: 0;
+		width: 15px;
+		}
+		#left { left: 0; }
+		#right { right: 0; }
+		
+	#top, #bottom {
+		left: 0; right: 0;
+		height: 15px;
+		}
+		#top { top: 50px; }
+		#bottom { bottom: 0; }
+ .sudo { 
+                text-indent: 75px; 
+            } 
+
+p {
+  margin-top: 25px;
+  margin-bottom: 50px;
+  margin-right: 75px;
+  margin-left: 75px;
+}
+              
 </style>
+
+
+<div id="top"></div>
+<div id="bottom"></div>
 <body style="font-family: 'Inconsolata', monospace;">
 <!-- This is a nav bar -->
 
@@ -39,7 +72,8 @@ body {
 
 </nav>
 </div>
-
-{{ md | safe}}
+<div id="left"></div>
+<div class = "sudo">{{ md | safe}}</div>
+<div id="right"></div>
 
 </body>
