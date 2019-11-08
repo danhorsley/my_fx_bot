@@ -4,18 +4,31 @@
 <style type="text/css" media="screen">
 
 .myCoolButton {
-    background: #D0D3D4;
+  text-align: center;
+    background: #2C3E50;
+    display: inline-block;
 }
-body {
+
+.mysubButton {
+    background: #3498DB;
+}
+body {text-align: center;
       background-color: #C0C0C0;
     }
+form {
+    display: inline-block;
+}
+article {
+    display: inline-block;
+}
+
 </style>
 <body style="font-family: 'Inconsolata', monospace;">
 <!-- This is a nav bar -->
 
 <div style="overflow: hidden;width: 650px;height: 50px;"> 
 
-<nav  style="width: 650px">
+<nav  >
   <a href="home" class="brand">
     <img href="home" class="logo" src="static/images/bot.png" />
     <span>FX Bot</span>
@@ -31,18 +44,19 @@ body {
 </nav>
 </div>
 
-<button class="myCoolButton">welcome {{name}}! </button>
-  <article class="card">
+
+  <article align="center" class="card">
+  <button align ="center" class="myCoolButton">welcome {{name}}! </button>
   <header>
-    <h3>decide your trade-gen and risk parameters</h3>
+    <h3 align="center" >decide your trade-gen and risk parameters</h3>
   </header>
-  <div class="flex one" style="width: 650px;height: 250pn">
+  <div align="center" class="flex one" style="width: 800px;height: 250pn">
   <button class="myCoolButton">please select below...</button>
   </div>
-  <form action="/home" method='POST'>
+  <form align='center' action="/home" method='POST'>
   
-  <div class="flex four" style="width: 650px;height: 250pn">
-  <h4 align="center"> time series </h4>
+  <div class="flex four" style="width: 800px;height: 250pn">
+  <h4 data-tooltip="currency prices come in pairs e.g.'EURUSD' means how many $ you get for 1 €" class="tooltip-top"> currency pair </h4>
   <select name="time_series" >
     <option value="EURUSD">EURUSD</option>
     <option value="USDJPY">USDJPY</option>
@@ -50,7 +64,7 @@ body {
     <option value="GBPUSD">GBPUSD</option>
     <option value="GBPJPY">GBPJPY</option>
   </select>
-  <h4 align="center"> simulations</h4>
+  <h4 data-tooltip="the number of simulations you want to run"> simulations</h4>
   <select name="sim_number">
     <option value= 3 > 3 </option>
     <option value= 5 > 5 </option>
@@ -58,7 +72,7 @@ body {
     <option value= 15 > 15 </option>
     <option value= 20 > 20 </option>
   </select>
-  <h4 align="center"> number of days</h4>
+  <h4 data-tooltip="the number of days you want each sim to run for"> number of days</h4>
   <select name="num_days">
     <option value= 100 > 100 </option>
     <option value= 200 > 200 </option>
@@ -66,7 +80,7 @@ body {
     <option value= 1000 > 1000 </option>
     <option value= 1500 > 1500 </option>
   </select>
-   <h4 align="center"> trend follow 1</h4>
+   <h4 data-tooltip="1 of 3 trend following - see under the hood for full details"> trend follow 1</h4>
   <select name="tf1">
     <option value= 0 > None </option>
     <option value= 5 > 5 </option>
@@ -74,7 +88,7 @@ body {
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>
   </select>
-     <h4 align="center"> trend follow 2</h4>
+     <h4 data-tooltip="1 of 3 trend following - see under the hood for full details"> trend follow 2</h4>
   <select name="tf2">
     <option value= 0 > None </option>
     <option value= 5 > 5 </option>
@@ -82,7 +96,7 @@ body {
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>
   </select>
-     <h4 align="center"> trend follow 3</h4>
+     <h4 data-tooltip="1 of 3 trend following - see under the hood for full details"> trend follow 3</h4>
   <select name="tf3">
     <option value= 0 > None </option>
     <option value= 5 > 5 </option>
@@ -96,20 +110,20 @@ body {
     <option value= 0 > No </option>
     
   </select>
-    <h4 align="center"> mean reversion </h4>
+    <h4 data-tooltip="strategy betting on the price reverting to mean - see under the hood"> mean reversion </h4>
     <select name="mr">
     <option value= 1 > Yes </option>
     <option value= 0 > No </option>
 
   </select>
-     <h4 align="center"> stop loss</h4>
+     <h4 data-tooltip="closing all trades at a % loss"> stop loss</h4>
   <select name="sl">
     <option value= -5 > 5 </option>
     <option value= -10 > 10 </option>
     <option value= -15 > 15 </option>
     <option value= -20 > 20 </option>
   </select>
-       <h4 align="center"> stop profit</h4>
+       <h4 data-tooltip="closing all trades at a % profit"> stop profit</h4>
   <select name="sp">
     <option value= 5 > 5 </option>
     <option value= 10 > 10 </option>
@@ -117,8 +131,8 @@ body {
     <option value= 20 > 20 </option>
   </select>
     </div>
-  <div class="flex one" style="width: 650px;height: 250pn">
-  <input class='myCoolButton' value="submit" type="submit" align="center">
+  <div class="flex one" style="width: 800px;height: 250pn">
+  <input class='mysubButton' value="-->SUBMIT TO THE BOT!<--" type="submit" align="center">
      </div>
 
   
