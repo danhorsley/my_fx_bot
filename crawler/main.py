@@ -210,12 +210,13 @@ def leader():
     """fully reset models"""
     my_query = DB.session.query(Leaderboard.profit,Leaderboard.name, Leaderboard.sim_number,Leaderboard.mr,
                                     Leaderboard.trend1,Leaderboard.trend2,Leaderboard.trend3, 
-                                    Leaderboard.stop_loss, Leaderboard.stop_profit,Leaderboard.currency,
-                                     Leaderboard.ltsm).order_by(Leaderboard.profit.desc()).all()
+                                    Leaderboard.stop_loss, Leaderboard.stop_profit,
+                                    Leaderboard.currency).order_by(Leaderboard.profit.desc()).all()
+    my_query = [(('{:,}'.format(x[0]),) + x[1:]) for x in my_query]
     #my_query = pd.DataFrame(my_query)
     #print(my_query.head())
-    cols= ['average profit','name','number of sims','mean reversion','trend1','trend2','trend3',
-                        'stop_loss','stop_profit','currency','ltsm']
+    cols= ['avg profit','name','num sims','mean rev','trend1','trend2','trend3',
+                        'stop_l','stop_pt','ccy',]
     # return render_template('leaderboard.html', name = 'Leaderboard', 
     #                             ldr = [my_query.to_html(classes='data')],
     #                              titles = my_query.columns.values)
