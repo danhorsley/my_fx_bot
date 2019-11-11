@@ -30,6 +30,7 @@ def r2_score_and_slope(y):
     return r_2, m, c
 
 
+
 import datetime as dt
 def monte_carlo(arr, n_days=500, paths=100,detrend=True,starting_point = 1.1):
     """Monte carlo simulation for date range - start date and end date
@@ -57,7 +58,7 @@ def p_and_l_np(arr, all_trades):
   current_position = np.cumsum(trades)
   pos_value = arr * current_position
   cost = -arr*trades
-  p_and_l = pos_value + np.cumsum(cost)
+  p_and_l = (pos_value + np.cumsum(cost))/(arr)
   return p_and_l, current_position
 
 def rolling_window(a, window):
@@ -84,7 +85,7 @@ class trading_rules:
     """class to hold trading rules for bot"""
     def __init__(self,portfolio_size = 1000000 , trade_increment = 100000, 
                  stop_loss = -5, stop_profit = 10, 
-                 trend_follow1=10, trend_follow2=30, trend_follow3=50,
+                 trend_follow1=10, trend_follow2=30, trend_follow3=50,tlev = 1,
                  mean_revert=False, mean_revert_inc = 0.5, trend_score = 0.8,):
         self.ps = portfolio_size
         self.ti = trade_increment
@@ -93,7 +94,7 @@ class trading_rules:
         self.tf1 = trend_follow1
         self.tf2 = trend_follow2
         self.tf3 = trend_follow3
-        self.mr = mean_revert
+        self.tlev = tlev
         self.mr = mean_revert
         self.mri =  mean_revert_inc
         self.ts = trend_score
@@ -139,11 +140,11 @@ class trading_rules:
 
         #trend trades - check to see that you don't exceed portfolio size
         
-        elif r2_condition == 1 and abs(cur_pos[-1] + direction*self.ti)<self.ps:
+        elif r2_condition == 1 and abs(cur_pos[-1] + direction*self.ti)<self.ps*self.tlev:
 
             new_trade = np.sign(np.dot(np.array(trend_scores[1]), is_trend))*self.ti
             
-        elif r2_condition >= 2 and abs(cur_pos[-1] + direction*self.ti)<self.ps:
+        elif r2_condition >= 2 and abs(cur_pos[-1] + direction*self.ti)<self.ps*self.tlev:
             
             if abs(cur_pos[-1] + 2*direction*self.ti) <= self.ps:
                 new_trade = 2*direction*self.ti

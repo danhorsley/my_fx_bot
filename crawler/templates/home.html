@@ -104,17 +104,30 @@ article {
     <option value= 30 > 30 </option>
     <option value= 50 > 50 </option>
   </select>
-     <h4 align="center"> ltsm</h4>
-  <select name="ltsm">
-    <option value= 1 > Yes </option>
-    <option value= 0 > No </option>
-    
+       <h4 data-tooltip="how much risk for trend strategy"> trend leverage</h4>
+  <select name="tlev">
+    <option value= 0.25 > 25% </option>
+    <option value= 0.5 > 50% </option>
+    <option value= 0.75 > 75% </option>
+    <option value= 1 > 100% </option>
+    <option value= 1.25 > 125% </option>
+    <option value= 1.50 > 150% </option>
   </select>
+
     <h4 data-tooltip="betting on price returning to mean"> mean reversion </h4>
     <select name="mr">
     <option value= 1 > Yes </option>
     <option value= 0 > No </option>
-
+    </select>
+    <h4 data-tooltip="how much risk for mean reversion strategy"> mean rev leverage</h4>
+  <select name="mrlev">
+    <option value= 0.25 > 25% </option>
+    <option value= 0.5 > 50% </option>
+    <option value= 0.75 > 75% </option>
+    <option value= 1 > 100% </option>
+    <option value= 1.25 > 125% </option>
+    <option value= 1.50 > 150% </option>
+  
   </select>
      <h4 data-tooltip="closing all trades at a % loss"> stop loss</h4>
   <select name="sl">

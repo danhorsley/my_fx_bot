@@ -1,4 +1,4 @@
-def make_text(ts,sims,nd,tf1,tf2,tf3,ltsm,mr,sl,sp,
+def make_text(ts,sims,nd,tf1,tf2,tf3,mr,sl,sp,
                 avg_pnl,min_pnl,max_pnl):
 
     if tf1==tf2==tf3==0:
@@ -21,6 +21,7 @@ def make_text(ts,sims,nd,tf1,tf2,tf3,ltsm,mr,sl,sp,
      {means} and excercised stop losses at {abs(sl)}% drawdown and stop profit at 
      {sp}% return.  These strategies returned an average return of {avg_pnl:.2f}%, with a best performance of {max_pnl:.2f}%
      and worst performance of {min_pnl:.2f}%.  Annualized these numbers equate to {100*((1+avg_pnl/100)**(225/nd)-1):.2f}%, 
-     {100*((1+max_pnl/100)**(225/nd)-1):.2f}% and {100*((1+min_pnl/100)**(225/nd)-1):.2f}% respectively.'''
+     {100*((1+max_pnl/100)**(225/nd)-1):.2f}% and {100*((1+min_pnl/100)**(225/nd)-1):.2f}% respectively.  
+     Profit numbers are given in the left hand currency.'''
 
     return ret
