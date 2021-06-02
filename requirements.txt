@@ -9,7 +9,7 @@ gunicorn==19.9.0
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
-markdown2==2.3.8
+markdown2==2.4.0
 MarkupSafe==1.1.1
 mkl==2019.0
 numpy==1.17.2
